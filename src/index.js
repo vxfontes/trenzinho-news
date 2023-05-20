@@ -1,9 +1,9 @@
-const express = require('express');
+const express = require('express')
 const app = express();
-// const routes = require('./server/routes/allRoutes')
 
+const route = require('./routes/allRoutes')
 
-// app.use('/', routes);
+app.use('/', route);
 
 /* Definindo qual porta a aplicação vai rodar */
 app.listen(3003, () => console.log("O servidor está rodando na porta 3003"));
