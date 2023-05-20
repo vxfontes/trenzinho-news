@@ -10,9 +10,11 @@ CROSS JOIN evento
 WHERE interesse.cod_evento = evento.codigo 
 GROUP BY interesse.cod_evento, evento.nome;
 
--- cada evento individual e a quantidade de pessoas interessadas nele: 
-SELECT e.codigo, e.nome, e.descricao, e.vagas, e.link, e.carga_horaria, e.certificado, e.data, e.horario, e.cod_categoria, e.local, e.modalidade, COUNT(*) AS quantidade_interessados 
+-- cada evento individual, quantidade de pessoas interessadas nele, modalidade e categoria: 
+SELECT e.codigo, e.nome, e.descricao, e.vagas, e.link, e.carga_horaria, e.certificado, e.data, e.horario, cat.nome AS categoria, e.local, m.nome AS modalidade, COUNT(*) AS quantidade_interessados 
+INTO resultados_temp
 FROM interesse AS i
-CROSS JOIN evento AS e 
-WHERE i.cod_evento = e.codigo
-GROUP BY e.codigo, e.nome, e.descricao, e.vagas, e.link, e.carga_horaria, e.certificado, e.data, e.horario, e.cod_categoria, e.local, e.modalidade;
+INNER JOIN evento AS e ON i.cod_evento = e.codigo
+INNER JOIN modalidade AS m ON e.modalidade = m.cod_modalidade
+INNER JOIN categoria AS cat ON e.cod_categoria = cat.cod_categoria
+GROUP BY e.codigo, e.nome, e.descricao, e.vagas, e.link, e.carga_horaria, e.certificado, e.data, e.horario, cat.nome, e.local, m.nome;
