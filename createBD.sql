@@ -11,7 +11,7 @@ CREATE TABLE Usuario (
         admin BOOLEAN,
         nome VARCHAR(30),
         email VARCHAR(30),
-        senha CHAR(8),
+        senha CHAR(16),
         PRIMARY KEY (id_user),
         UNIQUE (email)
     );
