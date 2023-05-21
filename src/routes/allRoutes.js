@@ -6,24 +6,21 @@ const route = express.Router();
 
 /* Rotas de Evento */
 const { exibirTodosUsuarios } = require('../controllers/user/viewAll');
-const { eventosPorCategoria } = require('../controllers/event/research');
-const { eventosEInteresses, exibirTodasCategorias } = require('../controllers/event/viewAll');
+const { eventosPorNome, eventosPorCodigo, eventosPorCategoria } = require('../controllers/event/research');
+const { exibirEventos, eventosEInteresses, exibirTodasCategorias } = require('../controllers/event/viewAll');
 
-// const controllerAddEvent = require('../server/controllers/event/add');
-// const controllerViewEvent = require('../server/controllers/event/viewAll');
-// const controllerResearch = require('../controllers/event/research');
 
-/* Definição das Rotas de Evento */
-// route.post('/addEvent', controllerAddEvent.add); // Cadastrar evento
-// route.post('/viewEvent', controllerViewEvent.viewAll); // Exibir todos os eventos cadastrados
-// route.post('/researchCategory', controllerResearch.category); // Pesquisar evento por categoria
 
 /* exibição de todos os itens de uma tabela*/
-route.get('/getAllEvents', eventosEInteresses); // exibir nossa tabela de eventos e quantidade de interessados
+route.get('/getAllEvents', exibirEventos); // exibir todos os eventos que estão acontecendo ou vão acontecer
+route.get('/eventsInterested', eventosEInteresses); // exibir nossa tabela de eventos e quantidade de interessados
 route.get('/users', exibirTodosUsuarios); // exibir todos os usuarios
-route.get('/categorias', exibirTodasCategorias); // exibir todos os usuarios
+route.get('/category', exibirTodasCategorias); // exibir todas as categorias
+
 
 /* busca e retorno em uma tabela */
+route.post('/researchName' , eventosPorNome); // Pesquisar evento por nome
+route.post('/researchCod' , eventosPorCodigo); // Pesquisar evento pelo seu código
 route.post('/researchCategory', eventosPorCategoria); // Pesquisar evento por categoria
 
 

@@ -7,7 +7,7 @@ const exibirTodosUsuarios = async (req, res) => {
         res.json(resultado.rows);
     } catch (error) {
         console.error('Erro ao executar a consulta:', error);
-        res.status(500).json({ error: 'Erro ao executar a consulta' });
+        res.status(500).json({ status: 'error', message: 'Erro ao executar a consulta' });
     }
 };
 
