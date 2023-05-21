@@ -2,10 +2,10 @@ const express = require('express');
 const route = express.Router();
 
 /* Rotas de Usuário */
+const { exibirTodosUsuarios } = require('../controllers/user/viewAll');
 
 
 /* Rotas de Evento */
-const { exibirTodosUsuarios } = require('../controllers/user/viewAll');
 const { eventosPorNome, eventosPorCodigo, eventosPorCategoria } = require('../controllers/event/research');
 const { exibirEventos, eventosEInteresses, exibirTodasCategorias } = require('../controllers/event/viewAll');
 

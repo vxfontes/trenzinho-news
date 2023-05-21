@@ -56,17 +56,22 @@ const eventosPorCodigo = async (req, res) => {
  * 
  * exibe tabela com todos os eventos que possuem a categoria requisitada
  * @param {*} req nome da categoria 
- */
+*/
 const eventosPorCategoria = async (req, res) => {
     const categoria = req.query.categoria;
 
     try {
         const consulta = `SELECT * FROM categoria CROSS JOIN evento WHERE categoria.nome = '${categoria}'`;
         const resultado = await db.query(consulta);
-        res.json(resultado.rows);
+        if (resultado.rows == '') { // Verifica se houve resultado na pesquisa
+            res.status(400).json({ status: 'error', message: 'Evento não encontrado ou expirado' });
+        }
+        else {
+            res.status(200).json({ status: 'success', result: resultado.rows });
+        }
     } catch (error) {
         console.error('Erro ao executar a consulta:', error);
-        res.status(500).json({ status: 'error', message: 'Erro ao executar a consulta', categoria: categoria });
+        res.status(500).json({ status: 'error', message: 'Erro ao executar a consulta' });
     }
 };
 
