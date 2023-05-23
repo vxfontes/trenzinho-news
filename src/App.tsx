@@ -1,9 +1,9 @@
-import './App.css'
+import LoginPage from './pages/login/loginPage'
 
 function App() {
   return (
     <>
-      <div>ok</div>
+      <LoginPage />
     </>
   )
 }
