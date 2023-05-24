@@ -4,6 +4,8 @@ const route = express.Router();
 /* Rotas de Usuário */
 
 const { exibirTodosUsuarios, myEvents } = require('../controllers/user/viewAll');
+const { addUser } = require('../controllers/user/add');
+const { deleteUser } = require('../controllers/user/delete');
 
 /* Rotas de Evento */
 const { eventosPorNome, eventosPorCodigo, eventosPorCategoria, eventosPorAtuacao, eventosPorModalidade, eventosPorCertificado } = require('../controllers/event/research');
@@ -21,7 +23,6 @@ route.get('/category', exibirTodasCategorias); // exibir todas as categorias
 route.get('/users', exibirTodosUsuarios); // exibir todos os usuarios
 
 
-
 /* busca e retorno em uma tabela */
 
 /* Eventos*/
@@ -35,6 +36,8 @@ route.post('/researchCerti', eventosPorCertificado); // Pesquisar evento por cer
 
 /* Usuários */
 route.post('/userEvents', myEvents); //exibir todos os eventos selecionados por um usuário
+route.post('/addUser', addUser); 
+route.post('/deleteUser', deleteUser);
 
 
 
