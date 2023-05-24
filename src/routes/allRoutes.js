@@ -10,7 +10,6 @@ const { eventosPorNome, eventosPorCodigo, eventosPorCategoria, eventosPorAtuacao
 const { exibirEventos, eventosEInteresses, exibirTodasCategorias } = require('../controllers/event/viewAll');
 
 
-
 /* exibição de todos os itens de uma tabela*/
 
 /* Eventos*/

@@ -55,7 +55,7 @@ const eventosPorCodigo = async (req, res) => {
  * 
  * exibe tabela com todos os eventos que possuem a categoria requisitada
  * @param {*} req nome da categoria 
- */
+*/
 const eventosPorCategoria = async (req, res) => {
     const categoria = req.query.categoria;
 
@@ -96,7 +96,6 @@ const eventosPorAtuacao = async (req, res) => {
             WHERE Evento_Area_Atuacao.cod_area = ${area} AND e.data >= CURRENT_DATE`;
 
         const resultado = await db.query(consulta);
-
         if (resultado.rows == '') { // Verifica se houve resultado na pesquisa
             res.status(400).json({ status: 'error', message: 'Evento não encontrado ou expirado' });
         }

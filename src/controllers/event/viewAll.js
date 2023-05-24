@@ -38,7 +38,13 @@ const eventosEInteresses = async (req, res) => {
             INNER JOIN categoria AS cat ON e.cod_categoria = cat.cod_categoria
             GROUP BY e.codigo, e.nome, e.descricao, e.vagas, e.link, e.carga_horaria, e.certificado, e.data, e.horario, cat.nome, e.local, m.nome`;
         const resultado = await db.query(consulta);
-        res.json(resultado.rows);
+        
+        if (resultado.rows == '') { // Verifica se houve resultado na pesquisa
+            res.status(400).json({ status: 'error', message: 'Não há evento cadastrado ou aberto' });
+        }
+        else {
+            res.status(200).json({ status: 'success', result: resultado.rows });
+        }
     } catch (error) {
         console.error('Erro ao executar a consulta:', error);
         res.status(500).json({ status: 'error', message: 'Erro ao executar a consulta' });
@@ -49,12 +55,17 @@ const eventosEInteresses = async (req, res) => {
  * 
  * exibe tabela com todas as categorias
  * @param {*} res todas as categorias
- */
+*/
 const exibirTodasCategorias = async (req, res) => {
     try {
         const consulta = 'SELECT * FROM categoria';
         const resultado = await db.query(consulta);
-        res.json(resultado.rows);
+        if (resultado.rows == '') { // Verifica se houve resultado na pesquisa
+            res.status(400).json({ status: 'error', message: 'Não há evento cadastrado ou aberto' });
+        }
+        else {
+            res.status(200).json({ status: 'success', result: resultado.rows });
+        }
     } catch (error) {
         console.error('Erro ao executar a consulta:', error);
         res.status(500).json({ status: 'error', message: 'Erro ao executar a consulta' });

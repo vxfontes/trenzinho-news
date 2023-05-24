@@ -12,6 +12,10 @@ const exibirTodosUsuarios = async (req, res) => {
 };
 
 /* Exibe todos os eventos selecionados por um usuário*/
+<<<<<<< HEAD
+=======
+
+>>>>>>> d6c45e6d0f95ddf485f01c21ee459daa0bcf1fe8
 const myEvents = async (req, res) => {
     const id_user = req.query.id_user;
 
@@ -20,6 +24,7 @@ const myEvents = async (req, res) => {
         const resultado = await db.query(consulta);
         res.json(resultado.rows);
 
+<<<<<<< HEAD
         if (resultado.rows == '') {
             res.status(400).json({ status: 'error', message: 'Evento não encontrado' })
         }
@@ -30,6 +35,18 @@ const myEvents = async (req, res) => {
     } catch (error) {
         console.log('Erro ao executar a consulta', error);
         res.status(500).json({ status: 'error', message: 'Erro ao executar a consulta' });
+=======
+        if(resultado.rows == '') {
+            res.status(400).json({status: 'error', message: 'Evento não encontrado'})
+        }
+        else {
+            res.status(200).json({status: 'sucess', result: resultado.rows })
+        }
+
+    }catch(error){
+        console.log('Erro ao executar a consulta', error);
+        res.status(500).json({status: 'error', message: 'Erro ao executar a consulta'});
+>>>>>>> d6c45e6d0f95ddf485f01c21ee459daa0bcf1fe8
     }
 }
 
