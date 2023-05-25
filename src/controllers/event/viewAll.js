@@ -2,43 +2,83 @@ const db = require('../../server/postgres');
 
 /**
  * 
+ * exibe tabela com todos os eventos (APENAS para admin)
+ * @param {*} res todos os eventos
+ */
+const exibirEventosAdmin = async (req, res) => {
+    try {
+        const consulta = `
+            SELECT e.codigo AS cod_event, e.nome AS nome_evento, e.descricao, e.vagas, 
+                e.link, e.carga_horaria, e.certificado, e.data, e.horario, e.local,
+                cat.cod_categoria, cat.nome AS nome_categ,
+                modali.cod_modalidade, modali.nome AS nome_modali, 
+                atua.codigo AS cod_area_atuacao, atua.nome AS nome_area_ataucao,
+                COUNT(*) AS total_interessados
+            FROM evento AS e
+            INNER JOIN categoria AS cat
+            ON cat.cod_categoria = e.cod_categoria
+            INNER JOIN modalidade AS modali
+            ON modali.cod_modalidade = e.modalidade
+            INNER JOIN evento_area_atuacao AS eaa
+            ON eaa.cod_evento = e.codigo
+            INNER JOIN area_atuacao AS atua
+            ON eaa.cod_area = atua.codigo
+            INNER JOIN interesse
+            ON interesse.cod_evento = e.codigo
+            GROUP BY e.codigo, e.nome, e.descricao, e.vagas, 
+                e.link, e.carga_horaria, e.certificado, e.data, e.horario, e.local,
+                cat.cod_categoria, cat.nome,
+                modali.cod_modalidade, modali.nome, 
+                atua.codigo, atua.nome `;
+
+        const resultado = await db.query(consulta);
+
+        if (resultado.rows == '') { // Verifica se houve resultado na pesquisa
+            res.status(400).json({ status: 'error', message: 'Não há evento cadastrado' });
+        }
+        else {
+            res.status(200).json({ status: 'success', result: resultado.rows });
+        }
+    } catch (error) {
+        console.error('Erro ao executar a consulta:', error);
+        res.status(500).json({ status: 'error', message: 'Erro ao executar a consulta' });
+    }
+};
+
+/**
+ * 
  * exibe tabela com todos os eventos que estão acontecendo ou vão acontecer
  * @param {*} res todos os eventos
  */
 const exibirEventos = async (req, res) => {
     try {
-        const consulta = 'SELECT * FROM evento WHERE data >= CURRENT_DATE';
-
-        const resultado = await db.query(consulta);
-
-        if (resultado.rows == '') { // Verifica se houve resultado na pesquisa
-            res.status(400).json({ status: 'error', message: 'Não há evento cadastrado ou aberto' });
-        }
-        else {
-            res.status(200).json({ status: 'success', result: resultado.rows });
-        }
-    } catch (error) {
-        console.error('Erro ao executar a consulta:', error);
-        res.status(500).json({ status: 'error', message: 'Erro ao executar a consulta' });
-    }
-};
-
-
-/**
- * exibe os eventos, quantidade de interessados, modalidade e categoria
- * @param {*} res retorno das tabelas
- */
-const eventosEInteresses = async (req, res) => {
-    try {
         const consulta = `
-            SELECT e.codigo, e.nome, e.descricao, e.vagas, e.link, e.carga_horaria, e.certificado, e.data, e.horario, cat.nome AS categoria, e.local, m.nome AS modalidade, COUNT(*) AS quantidade_interessados 
-            FROM interesse AS i
-            INNER JOIN evento AS e ON i.cod_evento = e.codigo
-            INNER JOIN modalidade AS m ON e.modalidade = m.cod_modalidade
-            INNER JOIN categoria AS cat ON e.cod_categoria = cat.cod_categoria
-            GROUP BY e.codigo, e.nome, e.descricao, e.vagas, e.link, e.carga_horaria, e.certificado, e.data, e.horario, cat.nome, e.local, m.nome`;
+            SELECT e.codigo AS cod_event, e.nome AS nome_evento, e.descricao, e.vagas, 
+                e.link, e.carga_horaria, e.certificado, e.data, e.horario, e.local,
+                cat.cod_categoria, cat.nome AS nome_categ,
+                modali.cod_modalidade, modali.nome AS nome_modali, 
+                atua.codigo AS cod_area_atuacao, atua.nome AS nome_area_ataucao,
+                COUNT(*) AS total_interessados
+            FROM evento AS e
+            INNER JOIN categoria AS cat
+            ON cat.cod_categoria = e.cod_categoria
+            INNER JOIN modalidade AS modali
+            ON modali.cod_modalidade = e.modalidade
+            INNER JOIN evento_area_atuacao AS eaa
+            ON eaa.cod_evento = e.codigo
+            INNER JOIN area_atuacao AS atua
+            ON eaa.cod_area = atua.codigo
+            INNER JOIN interesse
+            ON interesse.cod_evento = e.codigo
+            AND e.data >= CURRENT_DATE
+            GROUP BY e.codigo, e.nome, e.descricao, e.vagas, 
+                e.link, e.carga_horaria, e.certificado, e.data, e.horario, e.local,
+                cat.cod_categoria, cat.nome,
+                modali.cod_modalidade, modali.nome, 
+                atua.codigo, atua.nome `;
+
         const resultado = await db.query(consulta);
-        
+
         if (resultado.rows == '') { // Verifica se houve resultado na pesquisa
             res.status(400).json({ status: 'error', message: 'Não há evento cadastrado ou aberto' });
         }
@@ -50,6 +90,7 @@ const eventosEInteresses = async (req, res) => {
         res.status(500).json({ status: 'error', message: 'Erro ao executar a consulta' });
     }
 };
+
 
 /**
  * 
@@ -59,9 +100,11 @@ const eventosEInteresses = async (req, res) => {
 const exibirTodasCategorias = async (req, res) => {
     try {
         const consulta = 'SELECT * FROM categoria';
+
         const resultado = await db.query(consulta);
+
         if (resultado.rows == '') { // Verifica se houve resultado na pesquisa
-            res.status(400).json({ status: 'error', message: 'Não há evento cadastrado ou aberto' });
+            res.status(400).json({ status: 'error', message: 'Não há categoria cadastrada' });
         }
         else {
             res.status(200).json({ status: 'success', result: resultado.rows });
@@ -74,28 +117,31 @@ const exibirTodasCategorias = async (req, res) => {
 
 /**
  * 
- * exibe tabela com a quantidade de interessados em cada evento
- * @param {*} res todas os eventos e quantidade de interessados
- */
- const exibirInteressesPorEvento = async (req, res) => {
+ * exibe tabela com todas as áreas de atuação
+ * @param {*} res todas as áreas de atuação
+*/
+const exibirTodasAreas = async (req, res) => {
     try {
-        const consulta = `SELECT interesse.cod_evento, evento.nome, COUNT(*) AS total 
-        FROM interesse 
-        CROSS JOIN evento 
-        WHERE interesse.cod_evento = evento.codigo 
-        GROUP BY interesse.cod_evento, evento.nome`;
+        const consulta = 'SELECT * FROM area_atuacao';
 
         const resultado = await db.query(consulta);
-        
-        res.json(resultado.rows);
+
+        if (resultado.rows == '') { // Verifica se houve resultado na pesquisa
+            res.status(400).json({ status: 'error', message: 'Não há área de atuação cadastrada' });
+        }
+        else {
+            res.status(200).json({ status: 'success', result: resultado.rows });
+        }
     } catch (error) {
         console.error('Erro ao executar a consulta:', error);
         res.status(500).json({ status: 'error', message: 'Erro ao executar a consulta' });
     }
 };
 
+
 module.exports = {
+    exibirEventosAdmin: exibirEventosAdmin,
     exibirEventos: exibirEventos,
-    eventosEInteresses: eventosEInteresses,
-    exibirTodasCategorias: exibirTodasCategorias
+    exibirTodasCategorias: exibirTodasCategorias,
+    exibirTodasAreas: exibirTodasAreas
 };

@@ -1,26 +1,33 @@
 const express = require('express');
 const route = express.Router();
 
-/* Rotas de Usuário */
 
-const { exibirTodosUsuarios, myEvents } = require('../controllers/user/viewAll');
+/* Rotas de Usuário */
+const { exibirTodosUsuarios, userEvents } = require('../controllers/user/viewAll');
 const { addUser } = require('../controllers/user/add');
 const { deleteUser } = require('../controllers/user/delete');
 
 /* Rotas de Evento */
-const { eventosPorNome, eventosPorCodigo, eventosPorCategoria, eventosPorAtuacao, eventosPorModalidade, eventosPorCertificado } = require('../controllers/event/research');
-const { exibirEventos, eventosEInteresses, exibirTodasCategorias } = require('../controllers/event/viewAll');
+const { eventosPorNome, eventosPorCodigo, eventosPorCategoria, 
+        eventosPorModalidade, eventosPorAtuacao, eventosPorCertificado } = require('../controllers/event/research');
+
+const { exibirEventosAdmin, exibirEventos, exibirTodasCategorias, exibirTodasAreas } = require('../controllers/event/viewAll');
+
 
 
 /* exibição de todos os itens de uma tabela*/
 
-/* Eventos*/
-route.get('/getAllEvents', exibirEventos); // exibir todos os eventos que estão acontecendo ou vão acontecer
-route.get('/eventsInterested', eventosEInteresses); // exibir nossa tabela de eventos e quantidade de interessados
-route.get('/category', exibirTodasCategorias); // exibir todas as categorias
+/* Admin*/
+route.get('/allEventsAdmin', exibirEventosAdmin); // exibir todos os eventos (apenas para admin)
+route.get('/users', exibirTodosUsuarios); // exibir todos os usuarios comuns (apenas para admin)
 
-/* Usuários*/
-route.get('/users', exibirTodosUsuarios); // exibir todos os usuarios
+
+/* Eventos*/
+route.get('/allEvents', exibirEventos); // exibir todos os eventos que estão acontecendo ou vão acontecer
+route.get('/allCategory', exibirTodasCategorias); // exibir todas as categorias
+route.get('/allArea', exibirTodasAreas); // exibir todas as áreas de atuação
+
+
 
 
 /* busca e retorno em uma tabela */
@@ -29,14 +36,14 @@ route.get('/users', exibirTodosUsuarios); // exibir todos os usuarios
 route.post('/researchName', eventosPorNome); // Pesquisar evento por nome
 route.post('/researchCod', eventosPorCodigo); // Pesquisar evento pelo seu código
 route.post('/researchCategory', eventosPorCategoria); // Pesquisar evento por categoria
-route.post('/researchArea', eventosPorAtuacao); // Pesquisar evento por área de atuação
 route.post('/researchMod', eventosPorModalidade); // Pesquisar evento por modalidade
-route.post('/researchCerti', eventosPorCertificado); // Pesquisar evento por certificado
+route.post('/researchArea', eventosPorAtuacao); // Pesquisar evento por área de atuação
+route.post('/researchCertificate', eventosPorCertificado); // Pesquisar evento por certificado
 
 
 /* Usuários */
-route.post('/userEvents', myEvents); //exibir todos os eventos selecionados por um usuário
-route.post('/addUser', addUser); 
+route.post('/userEvents', userEvents); //exibir todos os eventos selecionados por um usuário
+route.post('/addUser', addUser);
 route.post('/deleteUser', deleteUser);
 
 
