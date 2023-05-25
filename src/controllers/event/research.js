@@ -36,7 +36,7 @@ const eventosPorNome = async (req, res) => {
             ON eaa.cod_area = atua.codigo
             INNER JOIN interesse
             ON interesse.cod_evento = e.codigo
-            WHERE e.nome = ${nome} AND e.data >= CURRENT_DATE
+            WHERE e.nome = '${nome}' AND e.data >= CURRENT_DATE
             GROUP BY e.codigo, e.nome, e.descricao, e.vagas, 
                 e.link, e.carga_horaria, e.certificado, e.data, e.horario, e.local,
                 cat.cod_categoria, cat.nome,
@@ -250,7 +250,6 @@ const eventosPorAtuacao = async (req, res) => {
         res.status(500).json({ status: 'error', message: 'Erro ao executar a consulta' });
     }
 };
-
 
 
 /**
