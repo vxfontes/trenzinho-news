@@ -18,10 +18,7 @@
   },
   "homepage": "https://github.com/vxfontes/trenzinho-news#readme",
   "dependencies": {
-<<<<<<< HEAD
     "cors": "^2.8.5",
-=======
->>>>>>> a94f4954dfed65f91df68a087748d3679f25149f
     "express": "^4.18.2",
     "pg": "^8.11.0"
   },
