@@ -3,7 +3,8 @@ import { ChildrenProps } from "../../interfaces/Children";
 import imagem from '../../assets/backgrounds/trianglifyBlue.png'
 
 export const Background = styled(Grid)({
-    height: '100vh',
+    minHeight: '100vh',
+    maxHeight: '100%',
     width: '100vw',
     backgroundColor: 'blue',
     backgroundImage: `url(${imagem})`,
@@ -13,5 +14,5 @@ export const Background = styled(Grid)({
 });
 
 export default function BackgroundTriangle({ children }: ChildrenProps) {
-    return <Background container direction="row" justifyContent="center" alignItems="center">{children}</Background>;
+    return <Background container direction="row" justifyContent="center" alignItems="center" spacing={1}>{children}</Background>;
 }
