@@ -57,33 +57,41 @@ const exibirEventos = async (req, res) => {
                 e.link, e.carga_horaria, e.certificado, e.data, e.horario, e.local,
                 cat.cod_categoria, cat.nome AS nome_categ,
                 modali.cod_modalidade, modali.nome AS nome_modali, 
-                atua.codigo AS cod_area_atuacao, atua.nome AS nome_area_ataucao,
                 COUNT(*) AS total_interessados
             FROM evento AS e
             INNER JOIN categoria AS cat
             ON cat.cod_categoria = e.cod_categoria
             INNER JOIN modalidade AS modali
             ON modali.cod_modalidade = e.modalidade
-            INNER JOIN evento_area_atuacao AS eaa
-            ON eaa.cod_evento = e.codigo
-            INNER JOIN area_atuacao AS atua
-            ON eaa.cod_area = atua.codigo
             INNER JOIN interesse
             ON interesse.cod_evento = e.codigo
             AND e.data >= CURRENT_DATE
             GROUP BY e.codigo, e.nome, e.descricao, e.vagas, 
                 e.link, e.carga_horaria, e.certificado, e.data, e.horario, e.local,
                 cat.cod_categoria, cat.nome,
-                modali.cod_modalidade, modali.nome, 
-                atua.codigo, atua.nome`;
+                modali.cod_modalidade, modali.nome`;
+        const consultaArea = `
+            SELECT ae.cod_evento, eve.nome, ae.cod_area, area.nome FROM evento_area_atuacao AS ae
+            INNER JOIN evento AS eve
+            ON eve.codigo = ae.cod_evento
+            INNER JOIN area_atuacao AS area
+            ON area.codigo = ae.cod_area
+            GROUP BY eve.nome, area.nome, ae.cod_evento, ae.cod_area`;
 
         const resultado = await db.query(consulta);
+        const resultadoArea = await db.query(consultaArea);
 
         if (resultado.rows == '') { // Verifica se houve resultado na pesquisa
             res.status(400).json({ status: 'error', message: 'Não há evento cadastrado ou aberto' });
         }
         else {
-            res.status(200).json({ status: 'success', result: resultado.rows });
+            const resultadoFinal = resultado.rows.map(res => {
+                const codigoEvento = res.cod_event;
+                const areaDeAtuacao = resultadoArea.rows.filter(row => row.cod_evento === codigoEvento);
+                res.area_de_atuacao = areaDeAtuacao;
+                return res;
+            });
+            res.status(200).json({ status: 'success', result: resultadoFinal });
         }
     } catch (error) {
         console.error('Erro ao executar a consulta:', error);
