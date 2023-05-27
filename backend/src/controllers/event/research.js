@@ -35,18 +35,18 @@ const eventosPorNome = async (req, res) => {
             GROUP BY e.codigo, e.nome, e.descricao, e.vagas, 
                 e.link, e.carga_horaria, e.certificado, e.data, e.horario, e.local,
                 cat.cod_categoria, cat.nome,
-                modali.cod_modalidade, modali.nome`;          
+                modali.cod_modalidade, modali.nome`;
 
         const resultado = await db.query(consulta);
 
         const codigoEvento = resultado.rows[0].cod_event;
 
-        const consulta2 = 
+        const consulta2 =
             `SELECT at.codigo AS cod_area, at.nome AS nome_area 
             FROM Evento_Area_Atuacao AS eaa
             INNER JOIN Area_Atuacao AS at
             ON eaa.cod_area = at.codigo
-            WHERE eaa.cod_evento = ${codigoEvento}`;  
+            WHERE eaa.cod_evento = ${codigoEvento}`;
 
         const resultado2 = await db.query(consulta2);
 
@@ -54,7 +54,11 @@ const eventosPorNome = async (req, res) => {
             res.status(400).json({ status: 'error', message: 'Evento não encontrado ou expirado' });
         }
         else {
-            res.status(200).json({ status: 'success', result: resultado.rows, result2: resultado2.rows});
+            const resultadoFinal = {
+                ...resultado.rows[0],
+                area_de_atuacao: resultado2.rows
+            };
+            res.status(200).json({ status: 'success', result: resultadoFinal });
         }
     } catch (error) {
         console.error('Erro ao executar a consulta:', error);
@@ -164,7 +168,7 @@ const eventosPorCategoria = async (req, res) => {
  * e que estão acontecendo ou vão acontecer
  * @param {*} req código da modalidade 
  */
- const eventosPorModalidade = async (req, res) => {
+const eventosPorModalidade = async (req, res) => {
     const cod_modalidade = req.query.cod_modalidade;
 
     try {
@@ -243,7 +247,7 @@ const eventosPorAtuacao = async (req, res) => {
                 atua.codigo, atua.nome `;
 
         const resultado = await db.query(consulta);
-        
+
         if (resultado.rows == '') { // Verifica se houve resultado na pesquisa
             res.status(400).json({ status: 'error', message: 'Evento não encontrado ou expirado' });
         }
@@ -263,7 +267,7 @@ const eventosPorAtuacao = async (req, res) => {
  * e que estão acontecendo ou vão acontecer
  * @param {*} req valor booleano (false ou true) para certificado 
  */
- const eventosPorCertificado = async (req, res) => {
+const eventosPorCertificado = async (req, res) => {
     const certificado = req.query.certificado;
 
     try {
