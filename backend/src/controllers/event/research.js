@@ -22,43 +22,19 @@ const eventosPorNome = async (req, res) => {
             SELECT e.codigo AS cod_event, e.nome AS nome_evento, e.descricao, e.vagas, 
                 e.link, e.carga_horaria, e.certificado, e.data, e.horario, e.local,
                 cat.cod_categoria, cat.nome AS nome_categ,
-<<<<<<< HEAD
-                modali.cod_modalidade, modali.nome AS nome_modali, 
-                atua.codigo AS cod_area_atuacao, atua.nome AS nome_area_ataucao,
-=======
                 modali.cod_modalidade, modali.nome AS nome_modali,
->>>>>>> a94f4954dfed65f91df68a087748d3679f25149f
                 COUNT(*) AS total_interessados
             FROM evento AS e
             INNER JOIN categoria AS cat
             ON cat.cod_categoria = e.cod_categoria
             INNER JOIN modalidade AS modali
             ON modali.cod_modalidade = e.modalidade
-<<<<<<< HEAD
-            INNER JOIN evento_area_atuacao AS eaa
-            ON eaa.cod_evento = e.codigo
-            INNER JOIN area_atuacao AS atua
-            ON eaa.cod_area = atua.codigo
-=======
->>>>>>> a94f4954dfed65f91df68a087748d3679f25149f
             INNER JOIN interesse
             ON interesse.cod_evento = e.codigo
             WHERE e.nome = '${nome}' AND e.data >= CURRENT_DATE
             GROUP BY e.codigo, e.nome, e.descricao, e.vagas, 
                 e.link, e.carga_horaria, e.certificado, e.data, e.horario, e.local,
                 cat.cod_categoria, cat.nome,
-<<<<<<< HEAD
-                modali.cod_modalidade, modali.nome, 
-                atua.codigo, atua.nome `;
-
-        const resultado = await db.query(consulta);
-
-        if (resultado.rows == '') { // Verifica se houve resultado na pesquisa
-            res.status(400).json({ status: 'error', message: 'Evento não encontrado ou expirado' });
-        }
-        else {
-            res.status(200).json({ status: 'success', result: resultado.rows });
-=======
                 modali.cod_modalidade, modali.nome`;
 
         const resultado = await db.query(consulta);
@@ -83,7 +59,6 @@ const eventosPorNome = async (req, res) => {
                 area_de_atuacao: resultado2.rows
             };
             res.status(200).json({ status: 'success', result: resultadoFinal });
->>>>>>> a94f4954dfed65f91df68a087748d3679f25149f
         }
     } catch (error) {
         console.error('Erro ao executar a consulta:', error);
@@ -193,11 +168,7 @@ const eventosPorCategoria = async (req, res) => {
  * e que estão acontecendo ou vão acontecer
  * @param {*} req código da modalidade 
  */
-<<<<<<< HEAD
- const eventosPorModalidade = async (req, res) => {
-=======
 const eventosPorModalidade = async (req, res) => {
->>>>>>> a94f4954dfed65f91df68a087748d3679f25149f
     const cod_modalidade = req.query.cod_modalidade;
 
     try {
@@ -276,11 +247,6 @@ const eventosPorAtuacao = async (req, res) => {
                 atua.codigo, atua.nome `;
 
         const resultado = await db.query(consulta);
-<<<<<<< HEAD
-        
-=======
-
->>>>>>> a94f4954dfed65f91df68a087748d3679f25149f
         if (resultado.rows == '') { // Verifica se houve resultado na pesquisa
             res.status(400).json({ status: 'error', message: 'Evento não encontrado ou expirado' });
         }
@@ -300,11 +266,7 @@ const eventosPorAtuacao = async (req, res) => {
  * e que estão acontecendo ou vão acontecer
  * @param {*} req valor booleano (false ou true) para certificado 
  */
-<<<<<<< HEAD
- const eventosPorCertificado = async (req, res) => {
-=======
 const eventosPorCertificado = async (req, res) => {
->>>>>>> a94f4954dfed65f91df68a087748d3679f25149f
     const certificado = req.query.certificado;
 
     try {

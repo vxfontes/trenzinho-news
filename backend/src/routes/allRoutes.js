@@ -8,17 +8,9 @@ const { addUser } = require('../controllers/user/add');
 const { deleteUser } = require('../controllers/user/delete');
 
 /* Rotas de Evento */
-const { eventosPorNome, eventosPorCodigo, eventosPorCategoria, 
-        eventosPorModalidade, eventosPorAtuacao, eventosPorCertificado } = require('../controllers/event/research');
-<<<<<<< HEAD
-
-const { exibirEventosAdmin, exibirEventos, exibirTodasCategorias, exibirTodasAreas } = require('../controllers/event/viewAll');
-
-
-=======
+const { eventosPorNome, eventosPorCodigo, eventosPorCategoria, eventosPorModalidade, eventosPorAtuacao, eventosPorCertificado } = require('../controllers/event/research');
 const { exibirEventosAdmin, exibirEventos, exibirTodasCategorias, exibirTodasAreas } = require('../controllers/event/viewAll');
 const { addEvento } = require('../controllers/event/add');
->>>>>>> a94f4954dfed65f91df68a087748d3679f25149f
 
 /* exibição de todos os itens de uma tabela*/
 
@@ -46,18 +38,11 @@ route.post('/researchArea', eventosPorAtuacao); // Pesquisar evento por área de
 route.post('/researchCertificate', eventosPorCertificado); // Pesquisar evento por certificado
 
 
-<<<<<<< HEAD
-/* Usuários */
-route.post('/userEvents', userEvents); //exibir todos os eventos selecionados por um usuário
-route.post('/addUser', addUser);
-route.post('/deleteUser', deleteUser);
-=======
 /* Usuários (Admin)*/
 route.post('/userEvents', userEvents); //exibir todos os eventos selecionados por um usuário
 route.post('/addUser', addUser);
 route.post('/deleteUser', deleteUser);
 route.post('/addEvento', addEvento);
->>>>>>> a94f4954dfed65f91df68a087748d3679f25149f
 
 
 
