@@ -75,7 +75,7 @@ const exibirEventos = async (req, res) => {
                 e.link, e.carga_horaria, e.certificado, e.data, e.horario, e.local,
                 cat.cod_categoria, cat.nome,
                 modali.cod_modalidade, modali.nome, 
-                atua.codigo, atua.nome `;
+                atua.codigo, atua.nome`;
 
         const resultado = await db.query(consulta);
 
@@ -138,10 +138,9 @@ const exibirTodasAreas = async (req, res) => {
     }
 };
 
-
 module.exports = {
     exibirEventosAdmin: exibirEventosAdmin,
     exibirEventos: exibirEventos,
     exibirTodasCategorias: exibirTodasCategorias,
-    exibirTodasAreas: exibirTodasAreas
+    exibirTodasAreas: exibirTodasAreas,
 };

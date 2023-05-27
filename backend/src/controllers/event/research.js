@@ -22,34 +22,39 @@ const eventosPorNome = async (req, res) => {
             SELECT e.codigo AS cod_event, e.nome AS nome_evento, e.descricao, e.vagas, 
                 e.link, e.carga_horaria, e.certificado, e.data, e.horario, e.local,
                 cat.cod_categoria, cat.nome AS nome_categ,
-                modali.cod_modalidade, modali.nome AS nome_modali, 
-                atua.codigo AS cod_area_atuacao, atua.nome AS nome_area_ataucao,
+                modali.cod_modalidade, modali.nome AS nome_modali,
                 COUNT(*) AS total_interessados
             FROM evento AS e
             INNER JOIN categoria AS cat
             ON cat.cod_categoria = e.cod_categoria
             INNER JOIN modalidade AS modali
             ON modali.cod_modalidade = e.modalidade
-            INNER JOIN evento_area_atuacao AS eaa
-            ON eaa.cod_evento = e.codigo
-            INNER JOIN area_atuacao AS atua
-            ON eaa.cod_area = atua.codigo
             INNER JOIN interesse
             ON interesse.cod_evento = e.codigo
             WHERE e.nome = '${nome}' AND e.data >= CURRENT_DATE
             GROUP BY e.codigo, e.nome, e.descricao, e.vagas, 
                 e.link, e.carga_horaria, e.certificado, e.data, e.horario, e.local,
                 cat.cod_categoria, cat.nome,
-                modali.cod_modalidade, modali.nome, 
-                atua.codigo, atua.nome `;
+                modali.cod_modalidade, modali.nome`;          
 
         const resultado = await db.query(consulta);
 
-        if (resultado.rows == '') { // Verifica se houve resultado na pesquisa
+        const codigoEvento = resultado.rows[0].cod_event;
+
+        const consulta2 = 
+            `SELECT at.codigo AS cod_area, at.nome AS nome_area 
+            FROM Evento_Area_Atuacao AS eaa
+            INNER JOIN Area_Atuacao AS at
+            ON eaa.cod_area = at.codigo
+            WHERE eaa.cod_evento = ${codigoEvento}`;  
+
+        const resultado2 = await db.query(consulta2);
+
+        if (resultado.rows == '' && resultado2.rows == '') { // Verifica se houve resultado na pesquisa
             res.status(400).json({ status: 'error', message: 'Evento não encontrado ou expirado' });
         }
         else {
-            res.status(200).json({ status: 'success', result: resultado.rows });
+            res.status(200).json({ status: 'success', result: resultado.rows, result2: resultado2.rows});
         }
     } catch (error) {
         console.error('Erro ao executar a consulta:', error);

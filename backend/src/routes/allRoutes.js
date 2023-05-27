@@ -10,10 +10,8 @@ const { deleteUser } = require('../controllers/user/delete');
 /* Rotas de Evento */
 const { eventosPorNome, eventosPorCodigo, eventosPorCategoria, 
         eventosPorModalidade, eventosPorAtuacao, eventosPorCertificado } = require('../controllers/event/research');
-
 const { exibirEventosAdmin, exibirEventos, exibirTodasCategorias, exibirTodasAreas } = require('../controllers/event/viewAll');
-
-
+const { addEvento } = require('../controllers/event/add');
 
 /* exibição de todos os itens de uma tabela*/
 
@@ -41,10 +39,11 @@ route.post('/researchArea', eventosPorAtuacao); // Pesquisar evento por área de
 route.post('/researchCertificate', eventosPorCertificado); // Pesquisar evento por certificado
 
 
-/* Usuários */
+/* Usuários (Admin)*/
 route.post('/userEvents', userEvents); //exibir todos os eventos selecionados por um usuário
 route.post('/addUser', addUser);
 route.post('/deleteUser', deleteUser);
+route.post('/addEvento', addEvento);
 
 
 
