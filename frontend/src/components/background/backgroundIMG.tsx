@@ -5,12 +5,17 @@ import imagem from '../../assets/backgrounds/trianglifyBlue.png'
 export const Background = styled(Grid)({
     minHeight: '100vh',
     maxHeight: '100%',
-    width: '100vw',
+    minWidth: '100vw',
+    maxWidth: '100%',
     backgroundColor: 'blue',
     backgroundImage: `url(${imagem})`,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
     border: 'none',
+    margin: 0,
+    padding: 0,
+    boxSizing: 'border-box',
+    outline: 'none',
 });
 
 export default function BackgroundTriangle({ children }: ChildrenProps) {
