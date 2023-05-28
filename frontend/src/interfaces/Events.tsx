@@ -1,19 +1,24 @@
 export interface EventData {
+    cod_event: number;
+    nome_evento: string;
+    descricao: string;
+    vagas: number;
+    link: string;
     carga_horaria: number;
     certificado: boolean;
-    cod_area_atuacao: number;
-    cod_categoria: number;
-    cod_event: number;
-    cod_modalidade: number;
     data: string;
-    descricao: string;
     horario: string;
-    link: string;
     local: string;
-    nome_area_ataucao: string;
+    cod_categoria: number;
     nome_categ: string;
-    nome_evento: string;
+    cod_modalidade: number;
     nome_modali: string;
     total_interessados: string;
-    vagas: number;
+    area_de_atuacao: AreaDeAtuacao[];
+}
+
+export interface AreaDeAtuacao {
+    cod_evento: number;
+    nome: string;
+    cod_area: number;
 }
