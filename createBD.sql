@@ -8,7 +8,7 @@ CREATE DATABASE TrenzinhoBD;
 
 CREATE TABLE Usuario (
         id_user SERIAL,
-        admin BOOLEAN NOT NULL,
+        is_admin BOOLEAN NOT NULL,
         nome VARCHAR(30) NOT NULL,
         email VARCHAR(30) NOT NULL,
         senha CHAR(16) NOT NULL,
@@ -37,18 +37,21 @@ CREATE TABLE Evento (
         nome VARCHAR(50) NOT NULL,
         descricao TEXT NOT NULL,
         vagas INTEGER NOT NULL,
-        link VARCHAR(100) NOT NULL,
+        link_evento VARCHAR(100) NOT NULL,
         carga_horaria INTEGER NOT NULL,
         certificado BOOLEAN NOT NULL,
-        data DATE NOT NULL,
+        data_evento DATE NOT NULL,
         horario TIME NOT NULL,
         cod_categoria INTEGER NOT NULL,
-        local TEXT NOT NULL,
+        local_evento TEXT NOT NULL,
         modalidade INTEGER NOT NULL,
+	id_admin INTEGER NOT NULL,
         FOREIGN KEY (cod_categoria) 
 			REFERENCES Categoria (cod_categoria) ON UPDATE CASCADE ON DELETE CASCADE,
         FOREIGN KEY (modalidade) 
-			REFERENCES Modalidade (cod_modalidade) ON UPDATE CASCADE ON DELETE CASCADE
+			REFERENCES Modalidade (cod_modalidade) ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY (id_admin)
+		REFERENCES Usuario (id_user) ON UPDATE CASCADE ON DELETE CASCADE
     );
 
 CREATE TABLE Evento_Area_Atuacao (
@@ -59,16 +62,6 @@ CREATE TABLE Evento_Area_Atuacao (
 			REFERENCES Evento (codigo) ON UPDATE CASCADE ON DELETE CASCADE,
         FOREIGN KEY (cod_area) 
 			REFERENCES Area_atuacao (codigo) ON UPDATE CASCADE ON DELETE CASCADE
-    );
-
-CREATE TABLE Cadastro (
-        id_user INTEGER,
-        cod_evento INTEGER,
-        PRIMARY KEY (id_user, cod_evento),
-        FOREIGN KEY (id_user) 
-			REFERENCES Usuario (id_user) ON UPDATE CASCADE ON DELETE CASCADE,
-        FOREIGN KEY (cod_evento) 
-			REFERENCES Evento (codigo) ON UPDATE CASCADE ON DELETE CASCADE
     );
 
 CREATE TABLE Interesse (
