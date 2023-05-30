@@ -5,6 +5,7 @@ const route = express.Router();
 /* Rotas de Usuário */
 const { exibirTodosUsuarios, userEvents } = require('../controllers/user/viewAll');
 const { addUser } = require('../controllers/user/add');
+const { authUser } = require('../controllers/user/auth');
 const { deleteUser } = require('../controllers/user/delete');
 
 /* Rotas de Evento */
@@ -43,6 +44,7 @@ route.post('/userEvents', userEvents); //exibir todos os eventos selecionados po
 route.post('/addUser', addUser);
 route.post('/deleteUser', deleteUser);
 route.post('/addEvento', addEvento);
+route.post('/login', authUser)
 
 
 
