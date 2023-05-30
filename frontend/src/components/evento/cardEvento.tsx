@@ -14,7 +14,7 @@ interface EventoProps {
 
 const CardEvento = ({event}: EventoProps) => {
     return (
-        <GridStyled key={event.cod_event} item xs={11} sm={6} md={3} lg={3} xl={3} sx={{ margin: 3, padding: 1, borderRadius: 3 }}>
+        <GridStyled key={event.cod_event} item xs={11} sm={6} md={3} lg={3} xl={3} sx={{ margin: 2, padding: 1, borderRadius: 3 }}>
             <TypoBebas p={1} variant="h4" color="initial">{event.nome_evento}</TypoBebas>
             <TypoRoboto pl={1} variant="body1" color="initial">{formatarData(event.data)} - {event.horario.slice(0, 5)}</TypoRoboto>
             <TypoNunito pl={1} variant="body1" color="initial" mb={1}>
