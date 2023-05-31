@@ -18,53 +18,64 @@ const eventosPorNome = async (req, res) => {
     const nome = req.query.nome;
 
     try {
-        const consulta = `
+        const consultaEvento = `
             SELECT e.codigo AS cod_event, e.nome AS nome_evento, e.descricao, e.vagas, 
-                e.link, e.carga_horaria, e.certificado, e.data, e.horario, e.local,
+                e.link_evento, e.carga_horaria, e.certificado, e.data_evento, e.horario, e.local_evento,
                 cat.cod_categoria, cat.nome AS nome_categ,
                 modali.cod_modalidade, modali.nome AS nome_modali,
-                COUNT(*) AS total_interessados
+                admin.id_user AS id_admin, admin.nome AS nome_admin
             FROM evento AS e
             INNER JOIN categoria AS cat
             ON cat.cod_categoria = e.cod_categoria
             INNER JOIN modalidade AS modali
             ON modali.cod_modalidade = e.modalidade
-            INNER JOIN interesse
-            ON interesse.cod_evento = e.codigo
-            WHERE e.nome = '${nome}' AND e.data >= CURRENT_DATE
-            GROUP BY e.codigo, e.nome, e.descricao, e.vagas, 
-                e.link, e.carga_horaria, e.certificado, e.data, e.horario, e.local,
-                cat.cod_categoria, cat.nome,
-                modali.cod_modalidade, modali.nome`;
+            INNER JOIN Usuario AS admin
+            ON admin.id_user = e.id_admin
+            WHERE e.nome = '${nome}' AND e.data_evento >= CURRENT_DATE`;
 
-        const resultado = await db.query(consulta);
+        const consultaArea = `
+            SELECT ae.cod_evento, eve.nome, ae.cod_area, area.nome FROM evento_area_atuacao AS ae
+            INNER JOIN evento AS eve
+            ON eve.codigo = ae.cod_evento
+            INNER JOIN area_atuacao AS area
+            ON area.codigo = ae.cod_area
+            GROUP BY eve.nome, area.nome, ae.cod_evento, ae.cod_area`;
 
-        const codigoEvento = resultado.rows[0].cod_event;
+        const consultaInteresse = `
+            SELECT e.codigo AS cod_evento, 
+            COUNT (i.cod_evento) AS total_interessados
+            FROM Evento AS e
+            LEFT JOIN Interesse AS i
+            ON i.cod_evento = e.codigo
+            GROUP BY e.codigo`;
 
-        const consulta2 =
-            `SELECT at.codigo AS cod_area, at.nome AS nome_area 
-            FROM Evento_Area_Atuacao AS eaa
-            INNER JOIN Area_Atuacao AS at
-            ON eaa.cod_area = at.codigo
-            WHERE eaa.cod_evento = ${codigoEvento}`;
+        const resultadoEvento = await db.query(consultaEvento);
+        const resultadoArea = await db.query(consultaArea);
+        const resultadoInteresse = await db.query(consultaInteresse);
 
-        const resultado2 = await db.query(consulta2);
-
-        if (resultado.rows == '' && resultado2.rows == '') { // Verifica se houve resultado na pesquisa
+        if (resultadoEvento.rows == '' || resultadoArea.rows == '' || resultadoInteresse.rows == '') { // Verifica se houve resultado na pesquisa
             res.status(400).json({ status: 'error', message: 'Evento não encontrado ou expirado' });
         }
         else {
-            const resultadoFinal = {
-                ...resultado.rows[0],
-                area_de_atuacao: resultado2.rows
-            };
+            const resultadoFinal = resultadoEvento.rows.map(res => {
+                const codigoEvento = res.cod_event;
+                const areaDeAtuacao = resultadoArea.rows.filter(row => row.cod_evento === codigoEvento);
+                const interesse = resultadoInteresse.rows.filter(row => row.cod_evento === codigoEvento)[0].total_interessados;
+                res.area_de_atuacao = areaDeAtuacao;
+                res.total_interessados = interesse;
+                return res;
+            });
             res.status(200).json({ status: 'success', result: resultadoFinal });
         }
     } catch (error) {
         console.error('Erro ao executar a consulta:', error);
         res.status(500).json({ status: 'error', message: 'Erro ao executar a consulta' });
     }
+
 };
+
+/** ******************* ******************* ******************* ******************* ******************* ******************* */
+/** ******************* ******************* ******************* ******************* ******************* ******************* */
 
 /**
  * Código Evento:
@@ -75,44 +86,66 @@ const eventosPorCodigo = async (req, res) => {
     const cod_evento = req.query.cod_evento;
 
     try {
-        const consulta = `
+        const consultaEvento = `
             SELECT e.codigo AS cod_event, e.nome AS nome_evento, e.descricao, e.vagas, 
-                e.link, e.carga_horaria, e.certificado, e.data, e.horario, e.local,
+                e.link_evento, e.carga_horaria, e.certificado, e.data_evento, e.horario, e.local_evento,
                 cat.cod_categoria, cat.nome AS nome_categ,
-                modali.cod_modalidade, modali.nome AS nome_modali, 
-                atua.codigo AS cod_area_atuacao, atua.nome AS nome_area_ataucao,
-                COUNT(*) AS total_interessados
+                modali.cod_modalidade, modali.nome AS nome_modali,
+                admin.id_user AS id_admin, admin.nome AS nome_admin
             FROM evento AS e
             INNER JOIN categoria AS cat
             ON cat.cod_categoria = e.cod_categoria
             INNER JOIN modalidade AS modali
             ON modali.cod_modalidade = e.modalidade
-            INNER JOIN evento_area_atuacao AS eaa
-            ON eaa.cod_evento = e.codigo
-            INNER JOIN area_atuacao AS atua
-            ON eaa.cod_area = atua.codigo
-            INNER JOIN interesse
-            ON interesse.cod_evento = e.codigo
-            WHERE e.codigo = ${cod_evento}
-            GROUP BY e.codigo, e.nome, e.descricao, e.vagas, 
-                e.link, e.carga_horaria, e.certificado, e.data, e.horario, e.local,
-                cat.cod_categoria, cat.nome,
-                modali.cod_modalidade, modali.nome, 
-                atua.codigo, atua.nome `;
+            INNER JOIN Usuario AS admin
+            ON admin.id_user = e.id_admin
+            WHERE e.codigo = ${cod_evento} AND e.data_evento >= CURRENT_DATE`;
 
-        const resultado = await db.query(consulta);
+        const consultaArea = `
+            SELECT ae.cod_evento, eve.nome, ae.cod_area, area.nome FROM evento_area_atuacao AS ae
+            INNER JOIN evento AS eve
+            ON eve.codigo = ae.cod_evento
+            INNER JOIN area_atuacao AS area
+            ON area.codigo = ae.cod_area
+            GROUP BY eve.nome, area.nome, ae.cod_evento, ae.cod_area`;
 
-        if (resultado.rows == '') { // Verifica se houve resultado na pesquisa
+        const consultaInteresse = `
+            SELECT e.codigo AS cod_evento, 
+            COUNT (i.cod_evento) AS total_interessados
+            FROM Evento AS e
+            LEFT JOIN Interesse AS i
+            ON i.cod_evento = e.codigo
+            GROUP BY e.codigo`;
+
+        const resultadoEvento = await db.query(consultaEvento);
+        const resultadoArea = await db.query(consultaArea);
+        const resultadoInteresse = await db.query(consultaInteresse);
+
+        if (resultadoEvento.rows == '' || resultadoArea.rows == '' || resultadoInteresse.rows == '') { // Verifica se houve resultado na pesquisa
             res.status(400).json({ status: 'error', message: 'Evento não encontrado' });
         }
         else {
-            res.status(200).json({ status: 'success', result: resultado.rows });
+            const resultadoFinal = resultadoEvento.rows.map(res => {
+                const codigoEvento = res.cod_event;
+                const areaDeAtuacao = resultadoArea.rows.filter(row => row.cod_evento === codigoEvento);
+                const interesse = resultadoInteresse.rows.filter(row => row.cod_evento === codigoEvento)[0].total_interessados;
+                res.area_de_atuacao = areaDeAtuacao;
+                res.total_interessados = interesse;
+                return res;
+            });
+            res.status(200).json({ status: 'success', result: resultadoFinal });
         }
     } catch (error) {
         console.error('Erro ao executar a consulta:', error);
         res.status(500).json({ status: 'error', message: 'Erro ao executar a consulta' });
     }
+
 };
+
+
+/** ******************* ******************* ******************* ******************* ******************* ******************* */
+/** ******************* ******************* ******************* ******************* ******************* ******************* */
+
 
 /**
  * Categoria:
@@ -123,44 +156,64 @@ const eventosPorCategoria = async (req, res) => {
     const cod_categoria = req.query.cod_categoria;
 
     try {
-        const consulta = `
+        const consultaEvento = `
             SELECT e.codigo AS cod_event, e.nome AS nome_evento, e.descricao, e.vagas, 
-                e.link, e.carga_horaria, e.certificado, e.data, e.horario, e.local,
+                e.link_evento, e.carga_horaria, e.certificado, e.data_evento, e.horario, e.local_evento,
                 cat.cod_categoria, cat.nome AS nome_categ,
-                modali.cod_modalidade, modali.nome AS nome_modali, 
-                atua.codigo AS cod_area_atuacao, atua.nome AS nome_area_ataucao,
-                COUNT(*) AS total_interessados
+                modali.cod_modalidade, modali.nome AS nome_modali,
+                admin.id_user AS id_admin, admin.nome AS nome_admin
             FROM evento AS e
             INNER JOIN categoria AS cat
             ON cat.cod_categoria = e.cod_categoria
             INNER JOIN modalidade AS modali
             ON modali.cod_modalidade = e.modalidade
-            INNER JOIN evento_area_atuacao AS eaa
-            ON eaa.cod_evento = e.codigo
-            INNER JOIN area_atuacao AS atua
-            ON eaa.cod_area = atua.codigo
-            INNER JOIN interesse
-            ON interesse.cod_evento = e.codigo
-            WHERE cat.cod_categoria = ${cod_categoria} AND e.data >= CURRENT_DATE
-            GROUP BY e.codigo, e.nome, e.descricao, e.vagas, 
-                e.link, e.carga_horaria, e.certificado, e.data, e.horario, e.local,
-                cat.cod_categoria, cat.nome,
-                modali.cod_modalidade, modali.nome, 
-                atua.codigo, atua.nome `;
+            INNER JOIN Usuario AS admin
+            ON admin.id_user = e.id_admin
+            WHERE cat.cod_categoria = ${cod_categoria} AND e.data_evento >= CURRENT_DATE`;
 
-        const resultado = await db.query(consulta);
+        const consultaArea = `
+            SELECT ae.cod_evento, eve.nome, ae.cod_area, area.nome FROM evento_area_atuacao AS ae
+            INNER JOIN evento AS eve
+            ON eve.codigo = ae.cod_evento
+            INNER JOIN area_atuacao AS area
+            ON area.codigo = ae.cod_area
+            GROUP BY eve.nome, area.nome, ae.cod_evento, ae.cod_area`;
 
-        if (resultado.rows == '') { // Verifica se houve resultado na pesquisa
+        const consultaInteresse = `
+            SELECT e.codigo AS cod_evento, 
+            COUNT (i.cod_evento) AS total_interessados
+            FROM Evento AS e
+            LEFT JOIN Interesse AS i
+            ON i.cod_evento = e.codigo
+            GROUP BY e.codigo`;
+
+        const resultadoEvento = await db.query(consultaEvento);
+        const resultadoArea = await db.query(consultaArea);
+        const resultadoInteresse = await db.query(consultaInteresse);
+
+        if (resultadoEvento.rows == '' || resultadoArea.rows == '' || resultadoInteresse.rows == '') { // Verifica se houve resultado na pesquisa
             res.status(400).json({ status: 'error', message: 'Evento não encontrado ou expirado' });
         }
         else {
-            res.status(200).json({ status: 'success', result: resultado.rows });
+            const resultadoFinal = resultadoEvento.rows.map(res => {
+                const codigoEvento = res.cod_event;
+                const areaDeAtuacao = resultadoArea.rows.filter(row => row.cod_evento === codigoEvento);
+                const interesse = resultadoInteresse.rows.filter(row => row.cod_evento === codigoEvento)[0].total_interessados;
+                res.area_de_atuacao = areaDeAtuacao;
+                res.total_interessados = interesse;
+                return res;
+            });
+            res.status(200).json({ status: 'success', result: resultadoFinal });
         }
     } catch (error) {
         console.error('Erro ao executar a consulta:', error);
         res.status(500).json({ status: 'error', message: 'Erro ao executar a consulta' });
     }
+
 };
+
+/** ******************* ******************* ******************* ******************* ******************* ******************* */
+/** ******************* ******************* ******************* ******************* ******************* ******************* */
 
 /**
  * Modalidade:
@@ -172,44 +225,64 @@ const eventosPorModalidade = async (req, res) => {
     const cod_modalidade = req.query.cod_modalidade;
 
     try {
-        const consulta = `
+        const consultaEvento = `
             SELECT e.codigo AS cod_event, e.nome AS nome_evento, e.descricao, e.vagas, 
-                e.link, e.carga_horaria, e.certificado, e.data, e.horario, e.local,
+                e.link_evento, e.carga_horaria, e.certificado, e.data_evento, e.horario, e.local_evento,
                 cat.cod_categoria, cat.nome AS nome_categ,
-                modali.cod_modalidade, modali.nome AS nome_modali, 
-                atua.codigo AS cod_area_atuacao, atua.nome AS nome_area_ataucao,
-                COUNT(*) AS total_interessados
+                modali.cod_modalidade, modali.nome AS nome_modali,
+                admin.id_user AS id_admin, admin.nome AS nome_admin
             FROM evento AS e
             INNER JOIN categoria AS cat
             ON cat.cod_categoria = e.cod_categoria
             INNER JOIN modalidade AS modali
             ON modali.cod_modalidade = e.modalidade
-            INNER JOIN evento_area_atuacao AS eaa
-            ON eaa.cod_evento = e.codigo
-            INNER JOIN area_atuacao AS atua
-            ON eaa.cod_area = atua.codigo
-            INNER JOIN interesse
-            ON interesse.cod_evento = e.codigo
-            WHERE modali.cod_modalidade = ${cod_modalidade} AND e.data >= CURRENT_DATE
-            GROUP BY e.codigo, e.nome, e.descricao, e.vagas, 
-                e.link, e.carga_horaria, e.certificado, e.data, e.horario, e.local,
-                cat.cod_categoria, cat.nome,
-                modali.cod_modalidade, modali.nome, 
-                atua.codigo, atua.nome `;
+            INNER JOIN Usuario AS admin
+            ON admin.id_user = e.id_admin
+            WHERE modali.cod_modalidade = ${cod_modalidade} AND e.data_evento >= CURRENT_DATE`;
 
-        const resultado = await db.query(consulta);
+        const consultaArea = `
+            SELECT ae.cod_evento, eve.nome, ae.cod_area, area.nome FROM evento_area_atuacao AS ae
+            INNER JOIN evento AS eve
+            ON eve.codigo = ae.cod_evento
+            INNER JOIN area_atuacao AS area
+            ON area.codigo = ae.cod_area
+            GROUP BY eve.nome, area.nome, ae.cod_evento, ae.cod_area`;
 
-        if (resultado.rows == '') { // Verifica se houve resultado na pesquisa
+        const consultaInteresse = `
+            SELECT e.codigo AS cod_evento, 
+            COUNT (i.cod_evento) AS total_interessados
+            FROM Evento AS e
+            LEFT JOIN Interesse AS i
+            ON i.cod_evento = e.codigo
+            GROUP BY e.codigo`;
+
+        const resultadoEvento = await db.query(consultaEvento);
+        const resultadoArea = await db.query(consultaArea);
+        const resultadoInteresse = await db.query(consultaInteresse);
+
+        if (resultadoEvento.rows == '' || resultadoArea.rows == '' || resultadoInteresse.rows == '') { // Verifica se houve resultado na pesquisa
             res.status(400).json({ status: 'error', message: 'Evento não encontrado ou expirado' });
         }
         else {
-            res.status(200).json({ status: 'success', result: resultado.rows });
+            const resultadoFinal = resultadoEvento.rows.map(res => {
+                const codigoEvento = res.cod_event;
+                const areaDeAtuacao = resultadoArea.rows.filter(row => row.cod_evento === codigoEvento);
+                const interesse = resultadoInteresse.rows.filter(row => row.cod_evento === codigoEvento)[0].total_interessados;
+                res.area_de_atuacao = areaDeAtuacao;
+                res.total_interessados = interesse;
+                return res;
+            });
+            res.status(200).json({ status: 'success', result: resultadoFinal });
         }
     } catch (error) {
         console.error('Erro ao executar a consulta:', error);
         res.status(500).json({ status: 'error', message: 'Erro ao executar a consulta' });
     }
+
 };
+
+/** ******************* ******************* ******************* ******************* ******************* ******************* */
+/** ******************* ******************* ******************* ******************* ******************* ******************* */
 
 /**
  * Área de atuação:
@@ -221,44 +294,67 @@ const eventosPorAtuacao = async (req, res) => {
     const cod_area = req.query.cod_area;
 
     try {
-        const consulta = `
+        const consultaEvento = `
             SELECT e.codigo AS cod_event, e.nome AS nome_evento, e.descricao, e.vagas, 
-                e.link, e.carga_horaria, e.certificado, e.data, e.horario, e.local,
+                e.link_evento, e.carga_horaria, e.certificado, e.data_evento, e.horario, e.local_evento,
                 cat.cod_categoria, cat.nome AS nome_categ,
-                modali.cod_modalidade, modali.nome AS nome_modali, 
-                atua.codigo AS cod_area_atuacao, atua.nome AS nome_area_ataucao,
-                COUNT(*) AS total_interessados
+                modali.cod_modalidade, modali.nome AS nome_modali,
+                admin.id_user AS id_admin, admin.nome AS nome_admin
             FROM evento AS e
             INNER JOIN categoria AS cat
             ON cat.cod_categoria = e.cod_categoria
             INNER JOIN modalidade AS modali
             ON modali.cod_modalidade = e.modalidade
-            INNER JOIN evento_area_atuacao AS eaa
-            ON eaa.cod_evento = e.codigo
-            INNER JOIN area_atuacao AS atua
-            ON eaa.cod_area = atua.codigo
-            INNER JOIN interesse
-            ON interesse.cod_evento = e.codigo
-            WHERE atua.codigo = ${cod_area} AND e.data >= CURRENT_DATE
-            GROUP BY e.codigo, e.nome, e.descricao, e.vagas, 
-                e.link, e.carga_horaria, e.certificado, e.data, e.horario, e.local,
-                cat.cod_categoria, cat.nome,
-                modali.cod_modalidade, modali.nome, 
-                atua.codigo, atua.nome `;
+            INNER JOIN Usuario AS admin
+            ON admin.id_user = e.id_admin
+            INNER JOIN evento_area_atuacao AS ae
+            ON ae.cod_evento = e.codigo
+            WHERE ae.cod_area = ${cod_area} AND e.data_evento >= CURRENT_DATE`;
 
-        const resultado = await db.query(consulta);
-        if (resultado.rows == '') { // Verifica se houve resultado na pesquisa
+        const consultaArea = `
+            SELECT ae.cod_evento, eve.nome, ae.cod_area, area.nome FROM evento_area_atuacao AS ae
+            INNER JOIN evento AS eve
+            ON eve.codigo = ae.cod_evento
+            INNER JOIN area_atuacao AS area
+            ON area.codigo = ae.cod_area 
+            GROUP BY eve.nome, area.nome, ae.cod_evento, ae.cod_area`;
+
+        const consultaInteresse = `
+            SELECT e.codigo AS cod_evento, 
+            COUNT (i.cod_evento) AS total_interessados
+            FROM Evento AS e
+            LEFT JOIN Interesse AS i
+            ON i.cod_evento = e.codigo
+            GROUP BY e.codigo`;
+
+        const resultadoEvento = await db.query(consultaEvento);
+        const resultadoArea = await db.query(consultaArea);
+        const resultadoInteresse = await db.query(consultaInteresse);
+
+        if (resultadoEvento.rows == '' || resultadoArea.rows == '' || resultadoInteresse.rows == '') { // Verifica se houve resultado na pesquisa
             res.status(400).json({ status: 'error', message: 'Evento não encontrado ou expirado' });
         }
         else {
-            res.status(200).json({ status: 'success', result: resultado.rows });
+            const resultadoFinal = resultadoEvento.rows.map(res => {
+                const codigoEvento = res.cod_event;
+                const areaDeAtuacao = resultadoArea.rows.filter(row => row.cod_evento === codigoEvento);
+                const interesse = resultadoInteresse.rows.filter(row => row.cod_evento === codigoEvento)[0].total_interessados;
+                res.area_de_atuacao = areaDeAtuacao;
+                res.total_interessados = interesse;
+                return res;
+            });
+            res.status(200).json({ status: 'success', result: resultadoFinal });
         }
     } catch (error) {
         console.error('Erro ao executar a consulta:', error);
         res.status(500).json({ status: 'error', message: 'Erro ao executar a consulta' });
     }
+
 };
 
+
+/** ******************* ******************* ******************* ******************* ******************* ******************* */
+/** ******************* ******************* ******************* ******************* ******************* ******************* */
 
 /**
  * 
@@ -270,20 +366,60 @@ const eventosPorCertificado = async (req, res) => {
     const certificado = req.query.certificado;
 
     try {
-        const consulta = `SELECT * FROM evento WHERE certificado = ${certificado} AND data >= CURRENT_DATE;`;
+        const consultaEvento = `
+            SELECT e.codigo AS cod_event, e.nome AS nome_evento, e.descricao, e.vagas, 
+                e.link_evento, e.carga_horaria, e.certificado, e.data_evento, e.horario, e.local_evento,
+                cat.cod_categoria, cat.nome AS nome_categ,
+                modali.cod_modalidade, modali.nome AS nome_modali,
+                admin.id_user AS id_admin, admin.nome AS nome_admin
+            FROM evento AS e
+            INNER JOIN categoria AS cat
+            ON cat.cod_categoria = e.cod_categoria
+            INNER JOIN modalidade AS modali
+            ON modali.cod_modalidade = e.modalidade
+            INNER JOIN Usuario AS admin
+            ON admin.id_user = e.id_admin
+            WHERE certificado = ${certificado} AND e.data_evento >= CURRENT_DATE`;
 
-        const resultado = await db.query(consulta);
+        const consultaArea = `
+            SELECT ae.cod_evento, eve.nome, ae.cod_area, area.nome FROM evento_area_atuacao AS ae
+            INNER JOIN evento AS eve
+            ON eve.codigo = ae.cod_evento
+            INNER JOIN area_atuacao AS area
+            ON area.codigo = ae.cod_area
+            GROUP BY eve.nome, area.nome, ae.cod_evento, ae.cod_area`;
 
-        if (resultado.rows == '') { // Verifica se houve resultado na pesquisa
+        const consultaInteresse = `
+            SELECT e.codigo AS cod_evento, 
+            COUNT (i.cod_evento) AS total_interessados
+            FROM Evento AS e
+            LEFT JOIN Interesse AS i
+            ON i.cod_evento = e.codigo
+            GROUP BY e.codigo`;
+
+        const resultadoEvento = await db.query(consultaEvento);
+        const resultadoArea = await db.query(consultaArea);
+        const resultadoInteresse = await db.query(consultaInteresse);
+
+        if (resultadoEvento.rows == '' || resultadoArea.rows == '' || resultadoInteresse.rows == '') { // Verifica se houve resultado na pesquisa
             res.status(400).json({ status: 'error', message: 'Evento não encontrado ou expirado' });
         }
         else {
-            res.status(200).json({ status: 'success', result: resultado.rows });
+            const resultadoFinal = resultadoEvento.rows.map(res => {
+                const codigoEvento = res.cod_event;
+                const areaDeAtuacao = resultadoArea.rows.filter(row => row.cod_evento === codigoEvento);
+                const interesse = resultadoInteresse.rows.filter(row => row.cod_evento === codigoEvento)[0].total_interessados;
+                res.area_de_atuacao = areaDeAtuacao;
+                res.total_interessados = interesse;
+                return res;
+            });
+            res.status(200).json({ status: 'success', result: resultadoFinal });
         }
     } catch (error) {
         console.error('Erro ao executar a consulta:', error);
         res.status(500).json({ status: 'error', message: 'Erro ao executar a consulta' });
     }
+
 };
 
 

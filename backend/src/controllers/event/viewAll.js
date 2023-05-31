@@ -42,7 +42,7 @@ const exibirEventosAdmin = async (req, res) => {
         const resultadoInteresse = await db.query(consultaInteresse);
 
         if (resultadoEvento.rows == '' || resultadoArea.rows == '' || resultadoInteresse.rows == '') { // Verifica se houve resultado na pesquisa
-            res.status(400).json({ status: 'error', message: 'Não há evento cadastrado ou aberto' });
+            res.status(400).json({ status: 'error', message: 'Não há evento cadastrado' });
         }
         else {
             const resultadoFinal = resultadoEvento.rows.map(res => {
