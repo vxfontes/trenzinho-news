@@ -1,5 +1,10 @@
 const db = require('../../server/postgres');
 
+/**
+ * Add User: 
+ * adiciona uma nova tupla na tabela Usuario, com id autoincrementado pelo próprio banco.
+ * @param {*} req nome do evento 
+ */
 const addUser = async (req, res) => {
     const admin = req.query.admin;
     const nome = req.query.nome;
@@ -9,11 +14,11 @@ const addUser = async (req, res) => {
 
     try {
         const consulta = 
-            `INSERT INTO Usuario(admin, nome, email, senha) VALUES (${admin}, '${nome}', '${email}', '${senha}')`;
+            `INSERT INTO Usuario(is_admin, nome, email, senha) VALUES (${admin}, '${nome}', '${email}', '${senha}')`;
 
         const resultado = await db.query(consulta);
 
-        if (resultado.rowCount === 1) { // Verifica se houve resultado na inserção de usuário
+        if (resultado.rowCount == 1) { // Verifica se houve resultado na inserção de usuário, retornando o número de tuplas afetadas pela consulta.
             res.status(200).json({ status: 'success', result: 'Usuário adicionado com sucesso' });
         }
         else {

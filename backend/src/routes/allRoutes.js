@@ -10,7 +10,7 @@ const { deleteUser } = require('../controllers/user/delete');
 
 /* Rotas de Evento */
 const { eventosPorNome, eventosPorCodigo, eventosPorCategoria, eventosPorModalidade, eventosPorAtuacao, eventosPorCertificado } = require('../controllers/event/research');
-const { exibirEventosAdmin, exibirEventos, exibirTodasCategorias, exibirTodasAreas } = require('../controllers/event/viewAll');
+const { exibirEventosAdmin, exibirEventos, exibirTodasCategorias, exibirTodasAreas, exibirModalidades, exibirEventosManha, exibirEventosTarde, exibirEventosNoite } = require('../controllers/event/viewAll');
 const { addEvento } = require('../controllers/event/add');
 
 /* exibição de todos os itens de uma tabela*/
@@ -24,6 +24,10 @@ route.get('/users', exibirTodosUsuarios); // exibir todos os usuarios comuns (ap
 route.get('/allEvents', exibirEventos); // exibir todos os eventos que estão acontecendo ou vão acontecer
 route.get('/allCategory', exibirTodasCategorias); // exibir todas as categorias
 route.get('/allArea', exibirTodasAreas); // exibir todas as áreas de atuação
+route.get('/allModal', exibirModalidades) // exibir todas as modalidades cadastradas
+route.get('/eventsMorning', exibirEventosManha) // exibir todos os eventos que estão acontecendo ou vão acontecer, que ocorrem a partir das 06h até antes das 12h
+route.get('/eventsAfternoon', exibirEventosTarde) // exibir todos os eventos que estão acontecendo ou vão acontecer, que ocorrem a partir das 12h até antes das 18h
+route.get('/eventsNight', exibirEventosNoite) // exibir todos os eventos que estão acontecendo ou vão acontecer, que ocorrem a partir das 18h até antes das 24h
 
 
 
@@ -43,7 +47,7 @@ route.post('/researchCertificate', eventosPorCertificado); // Pesquisar evento p
 route.post('/userEvents', userEvents); //exibir todos os eventos selecionados por um usuário
 route.post('/addUser', addUser);
 route.post('/deleteUser', deleteUser);
-route.post('/addEvento', addEvento);
+route.post('/addEvent', addEvento);
 route.post('/login', authUser)
 
 

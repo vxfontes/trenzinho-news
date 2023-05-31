@@ -4,8 +4,8 @@ const db = require('../../server/postgres');
  * Todos os eventos retornam uma tabela com as seguintes colunas: 
  *  nome, código do evento, descrição, vaga, carga horária, link, data, 
  *  nome da modalidade, código da modalidade, local, código da categoria, 
- *  nome categoria, certificado, código de área de atuação, área de atuação 
- *  e número de interessados
+ *  nome categoria, certificado, código de área de atuação, área de atuação, 
+ *  id e nome do usuario admin que o cadastrou, e número de interessados
  */
 
 /**
