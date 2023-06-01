@@ -16,3 +16,10 @@ export const ColorButtonWhite = styled(Button)<ButtonProps>(({
         backgroundColor: '#b3b1b1',
     },
 }));
+
+export const ColorButtonDisabled = styled(Button)<ButtonProps>(({
+    "&.Mui-disabled": {
+        background: "#f2f0fa",
+        color: "#515151"
+    }
+}));
