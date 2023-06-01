@@ -54,9 +54,9 @@ const Navbar = () => {
                     <Box>
                         <MenuItem onClick={handleClose}>Meu perfil</MenuItem>
 
-                        <Divider />
                         {admin && (
                             <Box>
+                                <Divider />
                                 <MenuItem onClick={handleClose}>Cadastrar evento</MenuItem>
                                 <MenuItem onClick={handleClose}>Usuários existentes</MenuItem>
                             </Box>
