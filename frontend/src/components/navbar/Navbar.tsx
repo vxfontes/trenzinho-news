@@ -28,7 +28,7 @@ const Navbar = () => {
             <AppBar position="fixed" color="default">
                 <Toolbar variant="dense" sx={{ justifyContent: 'space-between' }}>
                     <Box display={'flex'} alignItems='center'>
-                        <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
+                        <IconButton edge="start" color="inherit" onClick={() => navigate('/')} sx={{ mr: 2 }}>
                             <img src={logo} alt="Trenzinho acadêmico" height={50} />
                         </IconButton>
                         <TypoBebas variant="h5" color="#5a97f7">Trenzinho acadêmico</TypoBebas>
