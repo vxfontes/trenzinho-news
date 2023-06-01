@@ -3,12 +3,12 @@ export interface EventData {
     nome_evento: string;
     descricao: string;
     vagas: number;
-    link: string;
+    link_evento: string;
     carga_horaria: number;
     certificado: boolean;
-    data: string;
+    data_evento: string;
     horario: string;
-    local: string;
+    local_evento: string;
     cod_categoria: number;
     nome_categ: string;
     cod_modalidade: number;
