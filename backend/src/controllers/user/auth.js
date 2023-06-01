@@ -4,7 +4,7 @@ const authUser = async (req, res) => {
     const email = req.query.email;
     const password = req.query.password;
 
-    const consulta = `SELECT id_user, admin, nome, email FROM usuario 
+    const consulta = `SELECT id_user, is_admin, nome, email FROM usuario 
         WHERE email='${email}' and senha='${password}'`
 
     try {
