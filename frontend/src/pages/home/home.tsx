@@ -5,6 +5,7 @@ import Api from "../../api/Api";
 import { useEffect, useState } from "react";
 import { EventData } from "../../interfaces/Events";
 import CardEvento from "../../components/evento/cardEvento";
+import Navbar from "../../components/navbar/Navbar";
 
 const Home = () => {
 
@@ -24,6 +25,8 @@ const Home = () => {
 
     return (
         <BackgroundTriangle>
+            <Navbar />
+
             {loading ? (
                 <React.Fragment key={1}>
                     {events.map(event => (
