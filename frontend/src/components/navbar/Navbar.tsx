@@ -3,16 +3,17 @@ import { AppBar, Toolbar, IconButton, Box, Menu, MenuItem } from "@mui/material"
 import logo from '../../assets/logo/onlyTA.png'
 import { TypoBebas } from "../materialUiComponents/typography";
 import PersonIcon from '@mui/icons-material/Person';
-import { getLogin, isLogged, removerUsuarioLogado } from '../../logic/getLogin';
+import { removerUsuarioLogado } from '../../logic/getLogin';
 import { useNavigate } from 'react-router-dom';
 import Divider from '@mui/material/Divider';
+import LoginServices from '../../logic/LoginServices';
 
 const Navbar = () => {
 
     const navigate = useNavigate()
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
-    const admin = getLogin().is_admin;
+    const admin = LoginServices.gotLogin.is_admin
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
@@ -49,7 +50,7 @@ const Navbar = () => {
                     'aria-labelledby': 'basic-button',
                 }}
             >
-                {isLogged() ? (
+                {LoginServices.logged ? (
                     <Box>
                         <MenuItem onClick={handleClose}>Meu perfil</MenuItem>
 
