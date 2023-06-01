@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { CircularProgress, Grid } from "@mui/material";
+import { CircularProgress, Grid, Box } from "@mui/material";
 import Api from "../../api/Api";
 import { EventData } from "../../interfaces/Events";
 import CardEvento from "../../components/evento/cardEvento";
+import WelcomeMessage from "./welcome";
 
 
 const ExibicaoDeEventos = () => {
@@ -23,11 +24,21 @@ const ExibicaoDeEventos = () => {
     return (
         <>
             {loading ? (
-                <Grid container direction="row" justifyContent="center" alignItems="center">
-                    {events.map(event => (
-                        <CardEvento event={event} key={event.cod_event} />
-                    ))}
-                </Grid>
+                <Box sx={{
+                    backgroundColor: '#ffffffeb',
+                    marginTop: 30,
+                    marginBottom: 2,
+                    maxWidth: '90%',
+                    borderRadius: '20px',
+                }}>
+                    <WelcomeMessage />
+
+                    <Grid container direction="row" justifyContent="center" alignItems="center">
+                        {events.map(event => (
+                            <CardEvento event={event} key={event.cod_event} />
+                        ))}
+                    </Grid>
+                </Box>
             ) : (
                 <CircularProgress color="inherit" />
             )}

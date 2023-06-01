@@ -3,12 +3,12 @@ import Navbar from "../../components/navbar/Navbar";
 import ExibicaoDeEventos from "./eventos";
 
 const Home = () => {
-
     return (
         <BackgroundTriangle>
-            <Navbar />
 
+            <Navbar />
             <ExibicaoDeEventos />
+
         </BackgroundTriangle>
     );
 }
