@@ -11,3 +11,7 @@ export const getLogin: () => Usuario = () => {
     }
     else return JSON.parse(localStorage.getItem('usuarioLogado')!) as Usuario;
 }
+
+export const removerUsuarioLogado = () => {
+    localStorage.removeItem('usuarioLogado');
+}
