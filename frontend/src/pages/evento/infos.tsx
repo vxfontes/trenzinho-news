@@ -1,4 +1,4 @@
-import { Divider, Button, ButtonGroup } from "@mui/material";
+import { Divider, Button, ButtonGroup, Breadcrumbs, Link, Box } from "@mui/material";
 import { EventData } from '../../interfaces/Events';
 import { TypoBebas, TypoNunito } from '../../components/materialUiComponents/typography';
 import { formatarData } from '../../utils/data';
@@ -28,6 +28,13 @@ export const DescricaoEvento = ({ event }: EventoProps) => {
             <TypoNunito variant="body1" color="initial"><b>Sobre o evento:</b> <br /> {event.descricao}</TypoNunito>
             <TypoNunito pt={1} variant="body1" color="initial"><b>Data e horário:</b> {formatarData(event.data_evento)} - {event.horario.slice(0, 5)}</TypoNunito>
             <TypoNunito variant="body1" color="initial"><b>Local do evento:</b> {event.local_evento}</TypoNunito>
+
+            <Box sx={{ display: 'flex' }}>
+                <TypoNunito variant="body1" color="initial" mr={'0.3em'}><b>Áreas de atuação:</b></TypoNunito>
+                <Breadcrumbs aria-label="breadcrumb">
+                    {event.area_de_atuacao.map(area => <Link sx={{ textDecoration: 'none' }} color="inherit" href="/"><TypoNunito variant="body1" color="initial">{area.nome}</TypoNunito></Link>)}
+                </Breadcrumbs>
+            </Box>
         </>
     );
 }
