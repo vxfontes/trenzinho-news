@@ -65,7 +65,7 @@ const LoginPage = () => {
                         )}
                         Entrar
                     </ColorButtonBlue>
-                    <ColorButtonWhite fullWidth>Cadastrar</ColorButtonWhite>
+                    <ColorButtonWhite fullWidth onClick={() => navigate('/cadastro')}>Cadastrar</ColorButtonWhite>
 
                 </GridStyled>
             </Grid>
