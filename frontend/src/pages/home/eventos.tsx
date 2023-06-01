@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { useEffect, useState } from "react";
 import { CircularProgress, Grid } from "@mui/material";
 import Api from "../../api/Api";
@@ -17,15 +16,14 @@ const ExibicaoDeEventos = () => {
 
             setEvents(data)
         }).catch(error => {
-            alert('houve um erro')
-            console.log(error)
+            alert(error.response.data.message)
         }).finally(() => setloading(true))
     }, []);
 
     return (
         <>
             {loading ? (
-                <Grid container direction="row" justifyContent="center" alignItems="center" mt={10}>
+                <Grid container direction="row" justifyContent="center" alignItems="center">
                     {events.map(event => (
                         <CardEvento event={event} key={event.cod_event} />
                     ))}
