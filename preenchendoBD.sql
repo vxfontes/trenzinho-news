@@ -2,11 +2,15 @@
 
 -- USUARIO
 
-INSERT INTO Usuario (id_user, admin, nome, email, senha)
-VALUES (1, FALSE, 'João Silva', 'joao.silva@example.com', '12345678'), (2, TRUE, 'Maria Souza', 'maria.souza@example.com', 'admin123'), (3, FALSE, 'Pedro Oliveira', 'pedro.oliveira@example.com', 'senha123'), (4, FALSE, 'Ana Santos', 'ana.santos@example.com', 'senha123'),
-        (5, FALSE, 'Carlos Mendes', 'carlos.mendes@example.com', 'password'), (6, FALSE, 'Julia Costa', 'julia.costa@example.com', 'secure'), (7, TRUE, 'Lucas Ferreira', 'lucas.ferreira@example.com', 'admin123'), (8, FALSE, 'Camila Almeida', 'camila.almeida@example.com', 'qwert123'), (9, FALSE, 'Gustavo Lima', 'gustavo.lima@example.com', 'abc123');
+-- Inserir 5 usuários administradores
+INSERT INTO Usuario (is_admin, nome, email, senha)
+SELECT true, 'Administrador ' || generate_series, 'admin' || generate_series || '@exemplo.com', 'senha' || generate_series
+FROM generate_series(1, 5);
 
-SELECT * FROM Usuario;
+-- Inserir 11 usuários não administradores
+INSERT INTO Usuario (is_admin, nome, email, senha)
+SELECT false, 'Usuário ' || generate_series, 'usuario' || generate_series || '@exemplo.com', 'senha' || generate_series
+FROM generate_series(1, 11);
 
 -- CATEGORIAS	
 
