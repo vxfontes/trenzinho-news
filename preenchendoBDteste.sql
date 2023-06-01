@@ -28,16 +28,18 @@ VALUES (1, 'Presencial'), (2, 'Online');
 -- EVENTOS
 
 INSERT INTO Evento (nome, descricao, vagas, link_evento, carga_horaria, certificado, data_evento, horario, cod_categoria, modalidade, id_admin)
-SELECT 
-    'Evento ' || generate_series,
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vel hendrerit leo. In nisl ligula, finibus sed sapien vitae, blandit feugiat nunc. Quisque lobortis enim sem, id placerat urna euismod non. Proin blandit aliquam lorem, at molestie odio. Sed et ultrices libero. Suspendisse euismod egestas mauris, eu fermentum risus ultricies et. Cras tincidunt dui a libero dignissim, sit amet bibendum magna feugiat. Nullam volutpat est ante. Sed eu pharetra turpis. Aenean pellentesque lobortis tortor, ut maximus est consequat ac.Vestibulum vitae massa quis tortor dictum fringilla. Integer a orci in odio suscipit consequat. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aliquam erat volutpat. Donec hendrerit egestas augue, a consequat ante suscipit sed. Praesent sit amet velit sem. Suspendisse facilisis mauris eget facilisis tincidunt. Nullam vel ornare ante, semper lacinia dolor. Morbi quis neque vitae arcu posuere auctor eu sed sem. Maecenas in pharetra erat, at vehicula turpis. Sed condimentum nec felis id semper. Aenean consequat, arcu a fringilla fringilla, sapien magna vehicula nisl, ut fringilla est massa eget est Aliquam ex nibh, tristique vel ligula vitae, finibus tempor risus. Maecenas viverra est ac neque rhoncus volutpat a ut nulla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Morbi vitae luctus eros, vel eleifend nisl. Aliquam mollis facilisis commodo. Vestibulum lobortis iaculis turpis, malesuada pulvinar mauris porttitor a. Nulla quis volutpat quam, in cursus mi. Suspendisse pellentesque est ante, sit amet mattis odio rutrum porta.',
+SELECT
+    'Evento ' || e.num_evento,
+    'Descrição do evento ' || e.num_evento,
     floor(random() * 100) + 1,
-    'http://exemplo.com/evento' || generate_series,
+    'http://exemplo.com/evento' || e.num_evento,
     floor(random() * 10) + 1,
     random() < 0.5,
     CURRENT_DATE + (floor(random() * 30) + 1) * INTERVAL '1 day',
     CURRENT_TIME + INTERVAL '1 hour' * floor(random() * 12) + INTERVAL '30 minute',
-    floor(random() * 13) + 1,
-    CASE WHEN random() < 0.5 THEN 1 ELSE 2 END,
-    floor(random() * 4 + 1)
-FROM generate_series(1, 20);
+    c.cod_categoria,
+    m.cod_modalidade,
+    floor(random() * 16) + 33
+FROM generate_series(1, 20) AS e(num_evento)
+CROSS JOIN Categoria AS c
+CROSS JOIN Modalidade AS m;
