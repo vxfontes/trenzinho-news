@@ -1,6 +1,6 @@
 import BackgroundTriangle from "../../components/background/backgroundIMG";
 import ExibicaoDeEventos from "./eventos";
-import { Grid, FormControl, FormControlLabel, Radio, RadioGroup, FormLabel, Box, TextField, MenuItem } from "@mui/material";
+import { Grid, FormControl, FormControlLabel, Radio, RadioGroup, FormLabel, TextField, MenuItem } from "@mui/material";
 import { useEffect, useState } from "react";
 import { EventData } from "../../interfaces/Events";
 import Api from "../../api/Api";

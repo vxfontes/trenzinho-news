@@ -1,10 +1,7 @@
-import { useEffect, useState } from "react";
 import { CircularProgress, Grid, Box } from "@mui/material";
-import Api from "../../api/Api";
 import { EventData } from "../../interfaces/Events";
 import CardEvento from "../../components/evento/cardEvento";
 import WelcomeMessage from "./welcome";
-import Filtros from "./filtros";
 
 interface ExibicaoProps {
     events: EventData[];
