@@ -9,7 +9,7 @@ const { authUser } = require('../controllers/user/auth');
 const { deleteUser } = require('../controllers/user/delete');
 
 /* Rotas de Evento */
-const { eventosPorNome, eventosPorCodigo, eventosPorCategoria, eventosPorModalidade, eventosPorAtuacao, eventosPorCertificado } = require('../controllers/event/research');
+const { eventosPorNome, eventosPorCodigo, eventosPorCategoria, eventosPorModalidade, eventosPorAtuacao, eventosPorCertificado, eventosPorCertificadoGet } = require('../controllers/event/research');
 const { exibirEventosAdmin, exibirEventos, exibirTodasCategorias, exibirTodasAreas, exibirModalidades, exibirEventosManha, exibirEventosTarde, exibirEventosNoite } = require('../controllers/event/viewAll');
 const { addEvento } = require('../controllers/event/add');
 
@@ -41,6 +41,7 @@ route.post('/researchCategory', eventosPorCategoria); // Pesquisar evento por ca
 route.post('/researchMod', eventosPorModalidade); // Pesquisar evento por modalidade
 route.post('/researchArea', eventosPorAtuacao); // Pesquisar evento por área de atuação
 route.post('/researchCertificate', eventosPorCertificado); // Pesquisar evento por certificado
+route.get('/researchCertificateGet', eventosPorCertificadoGet); // Pesquisar evento por certificado
 
 
 /* Usuários (Admin)*/

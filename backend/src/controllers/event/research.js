@@ -420,6 +420,71 @@ const eventosPorCertificado = async (req, res) => {
         res.status(500).json({ status: 'error', message: 'Erro ao executar a consulta' });
     }
 
+
+};
+/**
+ * 
+ * exibe todos os eventos que possuem certificado ou não
+ * e que estão acontecendo ou vão acontecer
+ */
+const eventosPorCertificadoGet = async (req, res) => {
+    const certificado = true;
+
+    try {
+        const consultaEvento = `
+            SELECT e.codigo AS cod_event, e.nome AS nome_evento, e.descricao, e.vagas, 
+                e.link_evento, e.carga_horaria, e.certificado, e.data_evento, e.horario, e.local_evento,
+                cat.cod_categoria, cat.nome AS nome_categ,
+                modali.cod_modalidade, modali.nome AS nome_modali,
+                admin.id_user AS id_admin, admin.nome AS nome_admin
+            FROM evento AS e
+            INNER JOIN categoria AS cat
+            ON cat.cod_categoria = e.cod_categoria
+            INNER JOIN modalidade AS modali
+            ON modali.cod_modalidade = e.modalidade
+            INNER JOIN Usuario AS admin
+            ON admin.id_user = e.id_admin
+            WHERE certificado = ${certificado} AND e.data_evento >= CURRENT_DATE`;
+
+        const consultaArea = `
+            SELECT ae.cod_evento, eve.nome, ae.cod_area, area.nome FROM evento_area_atuacao AS ae
+            INNER JOIN evento AS eve
+            ON eve.codigo = ae.cod_evento
+            INNER JOIN area_atuacao AS area
+            ON area.codigo = ae.cod_area
+            GROUP BY eve.nome, area.nome, ae.cod_evento, ae.cod_area`;
+
+        const consultaInteresse = `
+            SELECT e.codigo AS cod_evento, 
+            COUNT (i.cod_evento) AS total_interessados
+            FROM Evento AS e
+            LEFT JOIN Interesse AS i
+            ON i.cod_evento = e.codigo
+            GROUP BY e.codigo`;
+
+        const resultadoEvento = await db.query(consultaEvento);
+        const resultadoArea = await db.query(consultaArea);
+        const resultadoInteresse = await db.query(consultaInteresse);
+
+        if (resultadoEvento.rows == '' || resultadoArea.rows == '' || resultadoInteresse.rows == '') { // Verifica se houve resultado na pesquisa
+            res.status(400).json({ status: 'error', message: 'Evento não encontrado ou expirado' });
+        }
+        else {
+            const resultadoFinal = resultadoEvento.rows.map(res => {
+                const codigoEvento = res.cod_event;
+                const areaDeAtuacao = resultadoArea.rows.filter(row => row.cod_evento === codigoEvento);
+                const interesse = resultadoInteresse.rows.filter(row => row.cod_evento === codigoEvento)[0].total_interessados;
+                res.area_de_atuacao = areaDeAtuacao;
+                res.total_interessados = interesse;
+                return res;
+            });
+            res.status(200).json({ status: 'success', result: resultadoFinal });
+        }
+    } catch (error) {
+        console.error('Erro ao executar a consulta:', error);
+        res.status(500).json({ status: 'error', message: 'Erro ao executar a consulta' });
+    }
+
 };
 
 
@@ -429,5 +494,6 @@ module.exports = {
     eventosPorCategoria: eventosPorCategoria,
     eventosPorModalidade: eventosPorModalidade,
     eventosPorAtuacao: eventosPorAtuacao,
-    eventosPorCertificado: eventosPorCertificado
+    eventosPorCertificado: eventosPorCertificado,
+    eventosPorCertificadoGet: eventosPorCertificadoGet
 };
