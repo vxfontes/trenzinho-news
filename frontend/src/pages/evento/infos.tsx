@@ -32,7 +32,7 @@ export const DescricaoEvento = ({ event }: EventoProps) => {
             <Box sx={{ display: 'flex' }}>
                 <TypoNunito variant="body1" color="initial" mr={'0.3em'}><b>Áreas de atuação:</b></TypoNunito>
                 <Breadcrumbs aria-label="breadcrumb">
-                    {event.area_de_atuacao.map(area => <Link sx={{ textDecoration: 'none' }} color="inherit" href="/"><TypoNunito variant="body1" color="initial">{area.nome}</TypoNunito></Link>)}
+                    {event.area_de_atuacao.map(area => <Link sx={{ textDecoration: 'none' }} color="inherit" href="/" key={area.cod_area}><TypoNunito variant="body1" color="initial">{area.nome}</TypoNunito></Link>)}
                 </Breadcrumbs>
             </Box>
         </>
