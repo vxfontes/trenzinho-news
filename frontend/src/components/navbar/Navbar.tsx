@@ -52,7 +52,7 @@ const Navbar = () => {
             >
                 {LoginServices.logged ? (
                     <Box>
-                        <MenuItem onClick={handleClose}>Meu perfil</MenuItem>
+                        <MenuItem onClick={() => { navigate('/areaUsuario'); setAnchorEl(null); }}>Meu perfil</MenuItem>
 
                         {admin && (
                             <Box>

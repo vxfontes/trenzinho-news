@@ -3,6 +3,7 @@ import EventoPage from './pages/evento';
 import Home from './pages/home/home';
 import Cadastro from './pages/login/cadastro';
 import LoginPage from './pages/login/loginPage';
+import UsuarioInteresses from './pages/usuario';
 
 function RoutesApp() {
     return (
@@ -11,6 +12,8 @@ function RoutesApp() {
             <Route path="/cadastro" element={<Cadastro />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/event/:id" element={<EventoPage />} />
+
+            <Route path="/areaUsuario" element={<UsuarioInteresses />} />
         </Routes>
     );
 }
