@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Grid, Alert, TextField, AlertColor, CircularProgress, Radio, RadioGroup, FormControl, FormLabel, FormControlLabel, MenuItem } from "@mui/material";
 import BackgroundTriangle from "../../components/background/backgroundIMG";
 import { GridStyled } from '../../components/materialUiComponents/Grids';
-import scene from '../../assets/scenes/1.png';
 import { TypoBebas, TypoNunito } from '../../components/materialUiComponents/typography';
 import { ColorButtonBlue } from '../../components/materialUiComponents/Buttons';
 import Api from '../../api/Api';
@@ -79,7 +78,7 @@ const AddEvento = () => {
 
     return (
         <BackgroundTriangle>
-            <GridStyled sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} item xs={10} md={10} sm={10} lg={10} xl={10} >
+            <GridStyled sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 10 }} item xs={10} md={10} sm={10} lg={10} xl={10} >
                 {LoginServices.gotLogin.is_admin ? (
                     <Grid container rowSpacing={1} spacing={4} lg={12} xl={10}>
 
