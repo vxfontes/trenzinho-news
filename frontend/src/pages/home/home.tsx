@@ -3,7 +3,7 @@ import ExibicaoDeEventos from "./eventos";
 import { Grid, FormControl, FormControlLabel, Radio, RadioGroup, FormLabel, TextField, MenuItem } from "@mui/material";
 import { useEffect, useState } from "react";
 import { EventData } from "../../interfaces/Events";
-import Api from "../../api/Api";
+import Api from "../../api/api.js";
 
 interface CategoriaProps {
     cod_categoria: number;
