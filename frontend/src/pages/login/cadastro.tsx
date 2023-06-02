@@ -14,16 +14,15 @@ const Cadastro = () => {
     const navigate = useNavigate();
     const [nome, setnome] = React.useState("");
     const [email, setEmail] = React.useState("");
-    const [password, setPassword] = React.useState("");
+    const [senha, setsenha] = React.useState("");
     const [loading, setLoading] = React.useState(false);
     const [alert, setAlert] = React.useState<AlertColor>("error");
     const [message, setMessage] = React.useState("");
 
     const submit = () => {
-        console.log(password)
-        Api.post('/addUser', null, { params: { admin, nome, email, password } }).then((res) => {
+        Api.post('/addUser', null, { params: { admin, nome, email, senha } }).then((res) => {
             setAlert("success");
-            setMessage(res.data.message)
+            setMessage(res.data.result)
 
             setTimeout(() => {
                 navigate('/login');
@@ -38,7 +37,7 @@ const Cadastro = () => {
     const handleSubmit = () => {
         setMessage("")
         setLoading(true);
-        if (email !== '' && password !== '' && nome !== '') {
+        if (email !== '' && senha !== '' && nome !== '') {
             submit();
         }
     }
@@ -58,7 +57,7 @@ const Cadastro = () => {
 
                     <TextField sx={{ mb: 1 }} label="Digite seu nome" variant="filled" fullWidth onChange={(e) => setnome(e.target.value)} /> <br />
                     <TextField sx={{ mb: 1 }} label="Digite seu email" variant="filled" fullWidth onChange={(e) => setEmail(e.target.value)} /> <br />
-                    <TextField sx={{ mb: 3 }} label="Digite sua senha" type='password' variant="filled" fullWidth onChange={(e) => setPassword(e.target.value)} />
+                    <TextField sx={{ mb: 3 }} label="Digite sua senha" type='password' variant="filled" fullWidth onChange={(e) => setsenha(e.target.value)} />
 
 
                     <ColorButtonBlue sx={{ mb: 1 }} fullWidth onClick={handleSubmit}>
