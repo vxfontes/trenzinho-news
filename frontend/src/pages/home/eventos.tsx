@@ -26,7 +26,7 @@ const ExibicaoDeEventos = () => {
             {loading ? (
                 <Box sx={{
                     backgroundColor: '#ffffffeb',
-                    marginTop: 30,
+                    marginTop: 20,
                     marginBottom: 2,
                     maxWidth: '90%',
                     borderRadius: '20px',
