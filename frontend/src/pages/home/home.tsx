@@ -5,12 +5,12 @@ import { useEffect, useState } from "react";
 import { EventData } from "../../interfaces/Events";
 import Api from '../../api/Api';
 
-interface CategoriaProps {
+export interface CategoriaProps {
     cod_categoria: number;
     nome: string;
 }
 
-interface AreaProps {
+export interface AreaProps {
     codigo: number;
     nome: string;
 }

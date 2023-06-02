@@ -57,7 +57,7 @@ const Navbar = () => {
                         {admin && (
                             <Box>
                                 <Divider />
-                                <MenuItem onClick={handleClose}>Cadastrar evento</MenuItem>
+                                <MenuItem onClick={() => { navigate('/addEvento'); setAnchorEl(null); }}>Cadastrar evento</MenuItem>
                                 <MenuItem onClick={() => { navigate('/listagem'); setAnchorEl(null); }}>Usuários existentes</MenuItem>
                             </Box>
                         )}

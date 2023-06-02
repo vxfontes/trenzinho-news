@@ -8,19 +8,19 @@ const db = require('../../server/postgres');
  * @param {*} req código do evento 
  */
 const addEvento = async (req, res) => {
+    const id_admin = req.query.id_admin;
     const nome = req.query.nome; // STRING => 
-    const descricao = req.query.descricao;
+    const local = req.query.local;
     const vagas = req.query.vagas;
-    const link = req.query.link;
     const carga_horaria = req.query.carga_horaria;
-    const certificado = req.query.certificado;
     const data = req.query.data;
     const horario = req.query.horario;
     const cod_categoria = req.query.cod_categoria;
-    const local = req.query.local;
-    const modalidade = req.query.modalidade;
-    const id_admin = req.query.id_admin;
     const areas = req.query.areas; // lista com codigos das areas de atuação do evento
+    const certificado = req.query.certificado;
+    const link = req.query.link;
+    const descricao = req.query.descricao;
+    const modalidade = req.query.modalidade;
 
     const listaAreas = areas.split(',').map(Number)
 
