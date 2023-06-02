@@ -49,7 +49,7 @@ route.post('/addUser', addUser);
 route.post('/deleteUser', deleteUser);
 route.post('/addEvent', addEvento);
 route.post('/login', authUser);
-route.post('/addIntersse', addUserInteresse);
+route.post('/addInteresse', addUserInteresse);
 
 
 

@@ -36,7 +36,7 @@ const EventoPage = () => {
 
     return (
         <BackgroundTriangle>
-            <DialogSuccess handleClose={handleClose} open={open} />
+            {event && <DialogSuccess handleClose={handleClose} open={open} event={event} />}
 
             {loading && event ? (
                 <Grid container direction="row" justifyContent="center" alignItems="center" spacing={1} sx={{
@@ -59,7 +59,7 @@ const EventoPage = () => {
                     </Grid>
 
                     <Grid item xs={11} sm={11} md={11} lg={11} xl={11} mt={3} textAlign="center" mb={4}>
-                        <Divider sx={{mb: 2}} />
+                        <Divider sx={{ mb: 2 }} />
                         <ConfirmacaoEvento event={event} onButtonClick={handleClickOpen} />
                     </Grid>
                 </Grid>
