@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
+import Listar from './pages/adm/listar';
 import EventoPage from './pages/evento';
 import Home from './pages/home/home';
 import Cadastro from './pages/login/cadastro';
@@ -16,6 +17,7 @@ function RoutesApp() {
 
             <Route path="/addEvento" element={<AddEvento />} />
             <Route path="/areaUsuario" element={<UsuarioInteresses />} />
+            <Route path="/listagem" element={<Listar />} />
         </Routes>
     );
 }
