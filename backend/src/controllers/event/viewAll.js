@@ -59,36 +59,6 @@ const exibirEventosAdmin = async (req, res) => {
         console.error('Erro ao executar a consulta:', error);
         res.status(500).json({ status: 'error', message: 'Erro ao executar a consulta' });
     }
-
-        /**
-         * const consulta = `
-            SELECT e.codigo AS cod_event, e.nome AS nome_evento, e.descricao, e.vagas, 
-                e.link_evento, e.carga_horaria, e.certificado, e.data_evento, e.horario, e.local_evento, e.id_admin,
-                cat.cod_categoria, cat.nome AS nome_categ,
-                modali.cod_modalidade, modali.nome AS nome_modali, 
-                atua.codigo AS cod_area_atuacao, atua.nome AS nome_area_ataucao,
-                admin.nome AS nome_admin,
-                COUNT(*) AS total_interessados
-            FROM evento AS e
-            INNER JOIN categoria AS cat
-            ON cat.cod_categoria = e.cod_categoria
-            INNER JOIN modalidade AS modali
-            ON modali.cod_modalidade = e.modalidade
-            INNER JOIN evento_area_atuacao AS eaa
-            ON eaa.cod_evento = e.codigo
-            INNER JOIN area_atuacao AS atua
-            ON eaa.cod_area = atua.codigo
-            INNER JOIN interesse
-            ON interesse.cod_evento = e.codigo
-            INNER JOIN usuario AS admin
-            ON admin.id_user = e.id_admin
-            GROUP BY e.codigo, e.nome, e.descricao, e.vagas, 
-                e.link_evento, e.carga_horaria, e.certificado, e.data_evento, e.horario, e.local_evento,
-                cat.cod_categoria, cat.nome,
-                modali.cod_modalidade, modali.nome, 
-                atua.codigo, atua.nome,
-                admin.nome `;
-         */
 };
 
 /**
