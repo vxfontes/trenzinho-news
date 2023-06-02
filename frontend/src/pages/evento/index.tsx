@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useParams } from "react-router-dom";
 import { CircularProgress, Grid, Divider } from "@mui/material";
-import Api from "../../api/api.js";
+import Api from '../../api/Api';
 import { EventData } from '../../interfaces/Events';
 import BackgroundTriangle from '../../components/background/backgroundIMG';
 import scene from '../../assets/scenes/3.png';

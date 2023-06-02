@@ -6,7 +6,7 @@ import { TypoNunito } from "../../components/materialUiComponents/typography";
 import { Grid, CircularProgress } from "@mui/material";
 import { EventData } from "../../interfaces/Events";
 import { useEffect, useState } from "react";
-import Api from "../../api/api.js";
+import Api from '../../api/Api';
 import CardEvento from "../../components/evento/cardEvento";
 
 const UsuarioInteresses = () => {

@@ -1,7 +1,7 @@
 import { Dialog, DialogTitle, DialogContent, Button, AlertColor, Alert, CircularProgress } from "@mui/material";
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
-import Api from "../../api/api.js";
+import Api from '../../api/Api';
 import { TypoNunito } from "../../components/materialUiComponents/typography";
 import { EventData } from "../../interfaces/Events";
 import LoginServices from "../../logic/LoginServices";

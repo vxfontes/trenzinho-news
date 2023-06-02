@@ -5,7 +5,7 @@ import { GridStyled } from '../../components/materialUiComponents/Grids';
 import scene from '../../assets/scenes/1.png';
 import { TypoBebas, TypoNunito } from '../../components/materialUiComponents/typography';
 import { ColorButtonBlue } from '../../components/materialUiComponents/Buttons';
-import Api from "../../api/api.js";
+import Api from '../../api/Api';
 import { useNavigate } from 'react-router-dom';
 
 const Cadastro = () => {

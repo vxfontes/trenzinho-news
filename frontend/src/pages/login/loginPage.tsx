@@ -1,7 +1,7 @@
 import { Grid, Typography, TextField, Box, CircularProgress, Alert, AlertColor } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Api from "../../api/api.js";
+import Api from '../../api/Api';
 import MeuSVG from "../../assets/logo/trenzinhoAcademico.svg";
 import BackgroundTriangle from "../../components/background/backgroundIMG";
 import { ColorButtonBlue, ColorButtonWhite } from "../../components/materialUiComponents/Buttons";
