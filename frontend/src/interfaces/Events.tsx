@@ -23,9 +23,12 @@ export interface AreaDeAtuacao {
     cod_area: number;
 }
 
-export interface Usuario {
-    id_user: number;
+export interface Usuario extends UsuarioProps {
     is_admin: boolean;
-    nome: string;
+}
+
+export interface UsuarioProps {
     email: string;
+    id_user: number;
+    nome: string;
 }

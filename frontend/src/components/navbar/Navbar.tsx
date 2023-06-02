@@ -58,7 +58,7 @@ const Navbar = () => {
                             <Box>
                                 <Divider />
                                 <MenuItem onClick={handleClose}>Cadastrar evento</MenuItem>
-                                <MenuItem onClick={handleClose}>Usuários existentes</MenuItem>
+                                <MenuItem onClick={() => { navigate('/listagem'); setAnchorEl(null); }}>Usuários existentes</MenuItem>
                             </Box>
                         )}
 
